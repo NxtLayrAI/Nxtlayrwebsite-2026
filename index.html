@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>NxtLayr AI | AI Voice Agents for Modern Business</title>
+  <link rel="icon" type="image/png" href="NxtLayrAI Small Logo.png">
+  <meta name="description" content="NxtLayr AI builds intelligent voice agents that handle real calls 24/7. Never miss a lead again.">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container-highest": "#262626",
+            "surface-container-lowest": "#000000",
+            "primary-fixed-dim": "#6dd1e8",
+            "secondary-fixed-dim": "#cdb9ff",
+            "primary-container": "#1b92a7",
+            "inverse-primary": "#006979",
+            "on-primary-fixed": "#003a44",
+            "on-error-container": "#ffa8a3",
+            "tertiary-fixed": "#3fff8b",
+            "on-error": "#490006",
+            "primary-dim": "#6dd1e8",
+            "secondary-container": "#6200ea",
+            "inverse-surface": "#fcf9f8",
+            "on-primary": "#004f5c",
+            "error-dim": "#d7383b",
+            "background": "#0a0a0a",
+            "outline": "#767575",
+            "surface-container": "#141414",
+            "surface": "#0a0a0a",
+            "tertiary-fixed-dim": "#24f07e",
+            "error": "#ff716c",
+            "on-tertiary-container": "#005d2c",
+            "surface-container-low": "#111111",
+            "tertiary-container": "#3fff8b",
+            "surface-container-high": "#1a1a1a",
+            "primary": "#7ce0f6",
+            "outline-variant": "#484848",
+            "on-surface": "#f0f0f0",
+            "on-secondary-fixed-variant": "#6000e5",
+            "secondary": "#aa8aff",
+            "on-primary-container": "#00272e",
+            "surface-tint": "#7ce0f6",
+            "on-secondary": "#270068",
+            "surface-variant": "#1e1e1e",
+            "on-secondary-fixed": "#3f009c",
+            "on-primary-fixed-variant": "#005967",
+            "secondary-fixed": "#d9caff",
+            "on-secondary-container": "#e9deff",
+            "tertiary": "#b5ffc2",
+            "surface-dim": "#0a0a0a",
+            "secondary-dim": "#844eff",
+            "on-surface-variant": "#999999",
+            "on-tertiary-fixed": "#004820",
+            "on-tertiary-fixed-variant": "#006832",
+            "tertiary-dim": "#24f07e",
+            "primary-fixed": "#7ce0f6",
+            "surface-bright": "#2c2c2c",
+            "on-tertiary": "#006731",
+            "error-container": "#9f0519",
+            "inverse-on-surface": "#565555",
+            "on-background": "#f0f0f0"
+          },
+          fontFamily: {
+            "headline": ["Space Grotesk", "sans-serif"],
+            "body": ["Manrope", "sans-serif"],
+            "label": ["Inter", "sans-serif"]
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    /* ========== BASE RESETS ========== */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { overflow-x: hidden; }
+    ::selection { background: rgba(124, 224, 246, 0.25); }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    }
+
+    /* ========== STARFIELD CANVAS ========== */
+    #starfield {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ========== LIGHT FILTERING / VOLUMETRIC RAYS ========== */
+    .light-filter {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .light-filter::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 160%;
+      height: 110%;
+      background: conic-gradient(
+        from 180deg at 50% 0%,
+        transparent 28%,
+        rgba(124, 224, 246, 0.07) 33%,
+        rgba(124, 224, 246, 0.03) 36%,
+        transparent 39%,
+        transparent 42%,
+        rgba(170, 138, 255, 0.06) 45%,
+        rgba(170, 138, 255, 0.02) 48%,
+        transparent 51%,
+        transparent 53%,
+        rgba(124, 224, 246, 0.05) 56%,
+        rgba(124, 224, 246, 0.02) 59%,
+        transparent 62%,
+        transparent 64%,
+        rgba(255, 255, 255, 0.04) 67%,
+        transparent 72%
+      );
+      filter: blur(30px);
+    }
+    .light-filter::after {
+      content: '';
+      position: absolute;
+      top: -15%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      height: 75%;
+      background: radial-gradient(
+        ellipse 70% 55% at 50% 0%,
+        rgba(124, 224, 246, 0.1) 0%,
+        rgba(170, 138, 255, 0.05) 30%,
+        transparent 65%
+      );
+      filter: blur(25px);
+    }
+
+    /* ========== SECTION DIVIDER ========== */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(124,224,246,0.15) 30%, rgba(170,138,255,0.15) 70%, transparent);
+      margin: 0 auto;
+      max-width: 80%;
+    }
+
+    /* ========== GLASSMORPHISM ========== */
+    .glass {
+      background: rgba(20, 20, 20, 0.55);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .glass-elevated {
+      background: rgba(26, 26, 26, 0.65);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* ========== GLOW EFFECTS ========== */
+    .glow-primary {
+      box-shadow: 0 0 40px rgba(124, 224, 246, 0.15), 0 0 80px rgba(124, 224, 246, 0.05);
+    }
+    .glow-primary-strong {
+      box-shadow: 0 0 30px rgba(124, 224, 246, 0.3), 0 0 60px rgba(124, 224, 246, 0.1);
+    }
+    .glow-secondary {
+      box-shadow: 0 0 40px rgba(170, 138, 255, 0.15), 0 0 80px rgba(170, 138, 255, 0.05);
+    }
+    .text-glow-primary {
+      text-shadow: 0 0 40px rgba(124, 224, 246, 0.3);
+    }
+
+    /* ========== ANIMATED GRADIENT BORDER ========== */
+    .gradient-border {
+      position: relative;
+    }
+    .gradient-border::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(124,224,246,0.3), rgba(170,138,255,0.2), rgba(181,255,194,0.1), transparent 60%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    /* ========== SCROLL ANIMATIONS ========== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-60px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(60px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-scale.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .stagger-1 { transition-delay: 0.1s; }
+    .stagger-2 { transition-delay: 0.2s; }
+    .stagger-3 { transition-delay: 0.3s; }
+    .stagger-4 { transition-delay: 0.4s; }
+    .stagger-5 { transition-delay: 0.5s; }
+
+    /* ========== HERO TYPING CURSOR ========== */
+    .cursor-blink {
+      display: inline-block;
+      width: 3px;
+      height: 1em;
+      background: #7ce0f6;
+      margin-left: 4px;
+      animation: blink 1s step-end infinite;
+      vertical-align: text-bottom;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    /* ========== HERO ORB ========== */
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      animation: float 8s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -20px) scale(1.05); }
+      66% { transform: translate(-20px, 15px) scale(0.95); }
+    }
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% center; }
+      50% { background-position: 100% center; }
+    }
+
+    /* ========== HERO ILLUSTRATION — AI Agent in Action ========== */
+    .hero-visual {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      max-width: 640px;
+    }
+    /* ========== AI AGENT AVATAR ========== */
+    .agent-core {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 3;
+    }
+    .agent-avatar {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+      border: 3px solid rgba(124,224,246,0.25);
+      box-shadow:
+        0 0 80px rgba(124,224,246,0.2),
+        0 0 160px rgba(170,138,255,0.1),
+        inset 0 0 40px rgba(124,224,246,0.08);
+    }
+    .agent-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* Gradient overlay on avatar for brand tint */
+    .agent-avatar::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(124,224,246,0.08), rgba(170,138,255,0.12));
+      pointer-events: none;
+    }
+    /* Status dot */
+    .agent-status {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #b5ffc2;
+      border: 3px solid #0a0a0a;
+      box-shadow: 0 0 14px rgba(181,255,194,0.6);
+      animation: statusPulse 2s ease-in-out infinite;
+      z-index: 4;
+    }
+    @keyframes statusPulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 14px rgba(181,255,194,0.6); }
+      50% { opacity: 0.6; box-shadow: 0 0 6px rgba(181,255,194,0.3); }
+    }
+    .agent-label {
+      margin-top: 12px;
+      font-size: 10px;
+      font-family: 'Inter', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: rgba(181,255,194,0.7);
+      font-weight: 600;
+    }
+
+    /* Voice pulse rings expanding from avatar */
+    .voice-pulse {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1.5px solid rgba(124,224,246,0.2);
+      animation: voicePulse 3s ease-out infinite;
+      pointer-events: none;
+    }
+    .voice-pulse:nth-child(1) { width: 180px; height: 180px; animation-delay: 0s; }
+    .voice-pulse:nth-child(2) { width: 230px; height: 230px; animation-delay: 0.8s; }
+    .voice-pulse:nth-child(3) { width: 280px; height: 280px; animation-delay: 1.6s; }
+    @keyframes voicePulse {
+      0% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.85); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(1.3); }
+    }
+
+    /* ========== INCOMING CALL SIGNAL (left side) ========== */
+    .call-signal {
+      position: absolute;
+      top: 50%;
+      left: 3%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      z-index: 3;
+    }
+    .call-icon-wrap {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(124,224,246,0.06);
+      border: 1.5px solid rgba(124,224,246,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .call-icon-wrap .material-symbols-outlined {
+      font-size: 26px;
+      color: #7ce0f6;
+      animation: callRing 1.5s ease-in-out infinite;
+    }
+    @keyframes callRing {
+      0%, 100% { transform: rotate(0deg); }
+      15% { transform: rotate(15deg); }
+      30% { transform: rotate(-15deg); }
+      45% { transform: rotate(10deg); }
+      60% { transform: rotate(0deg); }
+    }
+    /* Pulse rings from phone icon */
+    .call-pulse {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 1px solid rgba(124,224,246,0.2);
+      animation: callPulseOut 2s ease-out infinite;
+    }
+    .call-pulse:nth-child(2) { animation-delay: 0.6s; }
+    .call-pulse:nth-child(3) { animation-delay: 1.2s; }
+    @keyframes callPulseOut {
+      0% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(2.5); }
+    }
+    .call-label {
+      font-size: 9px;
+      font-family: 'Inter', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: rgba(124,224,246,0.5);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    /* Signal path line from call to agent */
+    .signal-path {
+      position: absolute;
+      top: 50%;
+      left: 16%;
+      width: 30%;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(124,224,246,0.35), rgba(124,224,246,0.03));
+      z-index: 1;
+    }
+    .signal-path::after {
+      content: '';
+      position: absolute;
+      top: -4px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #7ce0f6;
+      box-shadow: 0 0 16px rgba(124,224,246,0.7);
+      animation: signalTravel 2s ease-in-out infinite;
+    }
+    @keyframes signalTravel {
+      0% { left: 0%; opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { left: 100%; opacity: 0; }
+    }
+
+    /* ========== OUTCOME CARDS (right side) ========== */
+    .outcome-stack {
+      position: absolute;
+      top: 50%;
+      right: -2%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      z-index: 3;
+    }
+    .outcome-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      white-space: nowrap;
+      animation: outcomeAppear 18s ease-in-out infinite;
+      opacity: 0;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+    }
+    .outcome-card:nth-child(1) { animation-delay: 0s; }
+    .outcome-card:nth-child(2) { animation-delay: 3s; }
+    .outcome-card:nth-child(3) { animation-delay: 6s; }
+    .outcome-card:nth-child(4) { animation-delay: 9s; }
+    .outcome-card:nth-child(5) { animation-delay: 12s; }
+    .outcome-card:nth-child(6) { animation-delay: 15s; }
+    @keyframes outcomeAppear {
+      0%, 2% { opacity: 0; transform: translateY(10px); }
+      5%, 14% { opacity: 1; transform: translateY(0); }
+      17%, 100% { opacity: 0; transform: translateY(-6px); }
+    }
+    .outcome-card .material-symbols-outlined {
+      font-size: 20px;
+    }
+    .outcome-text {
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+    }
+    .outcome-sub {
+      font-size: 11px;
+      font-family: 'Inter', sans-serif;
+      color: rgba(255,255,255,0.4);
+      margin-left: auto;
+    }
+
+    /* Signal path from agent to outcomes */
+    .signal-path-out {
+      position: absolute;
+      top: 50%;
+      left: 58%;
+      width: 22%;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(170,138,255,0.03), rgba(170,138,255,0.3));
+      z-index: 1;
+    }
+    .signal-path-out::after {
+      content: '';
+      position: absolute;
+      top: -4px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #aa8aff;
+      box-shadow: 0 0 16px rgba(170,138,255,0.7);
+      animation: signalTravel 2.5s ease-in-out infinite 0.8s;
+    }
+    /* Orbiting rings — centered on agent avatar */
+    .orbit-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border-radius: 50%;
+      border: 1px solid rgba(124,224,246,0.1);
+      transform: translate(-50%, -50%);
+    }
+    .orbit-ring.ring-1 {
+      width: 240px; height: 240px;
+      animation: orbitSpin 20s linear infinite;
+    }
+    .orbit-ring.ring-2 {
+      width: 360px; height: 360px;
+      border-color: rgba(170,138,255,0.08);
+      animation: orbitSpin 30s linear infinite reverse;
+    }
+    .orbit-ring.ring-3 {
+      width: 500px; height: 500px;
+      border-color: rgba(124,224,246,0.05);
+      animation: orbitSpin 40s linear infinite;
+    }
+    @keyframes orbitSpin {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    /* Orbit dots */
+    .orbit-dot {
+      position: absolute;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #7ce0f6;
+      box-shadow: 0 0 14px rgba(124,224,246,0.7);
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+    }
+    .orbit-dot.dot-purple {
+      background: #aa8aff;
+      box-shadow: 0 0 14px rgba(170,138,255,0.7);
+      top: auto; bottom: 0;
+      transform: translateX(-50%) translateY(50%);
+    }
+    .orbit-dot.dot-green {
+      background: #b5ffc2;
+      box-shadow: 0 0 14px rgba(181,255,194,0.7);
+      top: 50%; left: 0;
+      transform: translateX(-50%) translateY(-50%);
+    }
+
+    /* Floating feature badges */
+    .hero-feature-badge {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(20,20,20,0.7);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 10px 16px;
+      white-space: nowrap;
+      animation: float-badge 4s ease-in-out infinite;
+    }
+
+    /* ========== GRID OVERLAY (Fathom-style) ========== */
+    .grid-overlay {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(124,224,246,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124,224,246,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
+    }
+
+    /* ========== INTEGRATIONS HUB ========== */
+    .hub-center {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #7ce0f6, #aa8aff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 60px rgba(124,224,246,0.3), 0 0 120px rgba(170,138,255,0.15);
+      z-index: 10;
+    }
+    .hub-line {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      height: 1px;
+      transform-origin: left center;
+      background: linear-gradient(90deg, rgba(255,255,255,0.15), rgba(255,255,255,0.03));
+      z-index: 1;
+    }
+    .hub-line .hub-dot {
+      position: absolute;
+      right: -3px;
+      top: -3px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: white;
+      opacity: 0.4;
+    }
+    .hub-tool {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: white;
+      color: #111;
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 10px 18px;
+      border-radius: 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      white-space: nowrap;
+      z-index: 10;
+    }
+    .hub-tool .tool-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* ========== SCROLLING MARQUEE ========== */
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marqueeScroll 25s linear infinite;
+    }
+    @keyframes marqueeScroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ========== METRIC COUNTER ========== */
+    .counter-ring {
+      transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ========== NAV SCROLL STATES ========== */
+    nav.scrolled {
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* ========== PROCESS TIMELINE ========== */
+    .timeline-line {
+      position: absolute;
+      top: 40px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(124,224,246,0.2) 20%, rgba(124,224,246,0.2) 80%, transparent);
+    }
+
+    /* ========== VERTICAL TABS ========== */
+    .vtab-btn {
+      position: relative;
+      text-align: left;
+      padding: 1.5rem 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      cursor: pointer;
+      transition: color 0.4s ease;
+    }
+    .vtab-btn:first-child { border-top: none; }
+    .vtab-btn .vtab-progress-track {
+      position: absolute;
+      left: -20px;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: rgba(255,255,255,0.06);
+    }
+    .vtab-btn .vtab-progress-bar {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 0%;
+      background: #7ce0f6;
+      transition: none;
+    }
+    .vtab-btn.active .vtab-progress-bar {
+      animation: none;
+    }
+    .vtab-started .vtab-btn.active .vtab-progress-bar {
+      animation: vtabFill 5s linear forwards;
+    }
+    @keyframes vtabFill {
+      from { height: 0%; }
+      to { height: 100%; }
+    }
+    .vtab-btn .vtab-desc {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s ease;
+    }
+    .vtab-btn.active .vtab-desc {
+      max-height: 120px;
+      opacity: 1;
+    }
+    .vtab-btn .vtab-title {
+      font-size: 1.5rem;
+      font-weight: 500;
+      transition: color 0.4s ease;
+      color: rgba(255,255,255,0.3);
+    }
+    .vtab-btn.active .vtab-title {
+      color: #fff;
+    }
+    .vtab-btn .vtab-num {
+      font-size: 0.6rem;
+      opacity: 0.4;
+      font-variant-numeric: tabular-nums;
+    }
+    @media (min-width: 768px) {
+      .vtab-btn .vtab-title { font-size: 2rem; }
+    }
+    @media (min-width: 1024px) {
+      .vtab-btn .vtab-title { font-size: 2.25rem; }
+    }
+
+    .vtab-content-area {
+      position: relative;
+      aspect-ratio: 16 / 11;
+      border-radius: 2rem;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 80%, rgba(124,224,246,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 50% at 80% 20%, rgba(170,138,255,0.06) 0%, transparent 50%),
+        rgba(20,20,20,0.4);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 20px 60px rgba(0,0,0,0.3);
+    }
+    /* Dot grid overlay */
+    .vtab-content-area::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 24px 24px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .vtab-slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      opacity: 0;
+      transform: translateY(-30px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .vtab-slide.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    /* ========== CTA SHIMMER ========== */
+    .shimmer {
+      position: relative;
+      overflow: hidden;
+    }
+    .shimmer::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    /* ========== FLOATING BADGE ========== */
+    .float-badge {
+      animation: float-badge 4s ease-in-out infinite;
+    }
+    @keyframes float-badge {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* ========== MOBILE NAV ========== */
+    .mobile-menu {
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .mobile-menu.open {
+      transform: translateX(0);
+    }
+
+    /* ========== SMOOTH INPUT FOCUS ========== */
+    input:focus, textarea:focus, select:focus {
+      box-shadow: 0 0 0 2px rgba(124, 224, 246, 0.2);
+    }
+
+    /* ========== CUSTOM SCROLLBAR ========== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0a0a; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #555; }
+  </style>
+</head>
+
+<body class="bg-background text-on-surface font-body antialiased">
+
+<!-- ========== STARFIELD BACKGROUND ========== -->
+<canvas id="starfield"></canvas>
+
+<!-- ========== LIGHT FILTERING OVERLAY ========== -->
+<div class="light-filter"></div>
+
+<!-- ========== NAVIGATION ========== -->
+<nav id="mainNav" class="fixed top-0 w-full z-50 transition-all duration-500">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="flex justify-between items-center h-20">
+      <!-- Logo -->
+      <a href="#" class="flex items-center group">
+        <img src="NxtLayr AI Logo No background.png" alt="NxtLayr AI" class="h-[4.5rem] group-hover:scale-105 transition-transform duration-300">
+      </a>
+
+      <!-- Desktop Links -->
+      <div class="hidden md:flex items-center gap-1">
+        <a href="#" class="nav-link px-4 py-2 rounded-lg text-white/90 hover:text-white hover:bg-white/5 transition-all text-sm font-medium">Home</a>
+        <a href="#services" class="nav-link px-4 py-2 rounded-lg text-white/50 hover:text-white hover:bg-white/5 transition-all text-sm font-medium">Services</a>
+        <a href="#process" class="nav-link px-4 py-2 rounded-lg text-white/50 hover:text-white hover:bg-white/5 transition-all text-sm font-medium">Process</a>
+        <a href="#results" class="nav-link px-4 py-2 rounded-lg text-white/50 hover:text-white hover:bg-white/5 transition-all text-sm font-medium">Results</a>
+        <a href="#contact" class="nav-link px-4 py-2 rounded-lg text-white/50 hover:text-white hover:bg-white/5 transition-all text-sm font-medium">Contact</a>
+      </div>
+
+      <!-- CTA + Mobile Toggle -->
+      <div class="flex items-center gap-4">
+        <a href="#contact" class="hidden md:inline-flex items-center gap-2 text-white font-semibold px-6 py-2.5 rounded-full text-sm hover:scale-105 transition-all duration-300" style="background: #4da8ba; box-shadow: 0 0 15px rgba(77,168,186,0.3);">
+          Book a Call
+          <span class="material-symbols-outlined text-base">arrow_forward</span>
+        </a>
+        <button id="menuToggle" class="md:hidden w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/5 transition-colors">
+          <span class="material-symbols-outlined text-white">menu</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mobileMenu" class="mobile-menu fixed inset-0 z-[60] bg-background/95 backdrop-blur-xl flex flex-col">
+  <div class="flex justify-between items-center px-6 h-20">
+    <span class="text-lg font-bold text-white font-headline">NxtLayr<span class="text-primary">.</span></span>
+    <button id="menuClose" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/5">
+      <span class="material-symbols-outlined text-white">close</span>
+    </button>
+  </div>
+  <div class="flex flex-col items-center justify-center flex-1 gap-8">
+    <a href="#" class="mobile-nav-link text-3xl font-headline font-bold text-white hover:text-primary transition-colors">Home</a>
+    <a href="#services" class="mobile-nav-link text-3xl font-headline font-bold text-white/60 hover:text-primary transition-colors">Services</a>
+    <a href="#process" class="mobile-nav-link text-3xl font-headline font-bold text-white/60 hover:text-primary transition-colors">Process</a>
+    <a href="#results" class="mobile-nav-link text-3xl font-headline font-bold text-white/60 hover:text-primary transition-colors">Results</a>
+    <a href="#contact" class="mobile-nav-link text-3xl font-headline font-bold text-white/60 hover:text-primary transition-colors">Contact</a>
+    <a href="#contact" class="mt-8 text-white font-semibold px-8 py-3 rounded-full text-lg" style="background: #4da8ba;">Book a Call</a>
+  </div>
+</div>
+
+<!-- ========== HERO SECTION ========== -->
+<section class="relative min-h-screen flex items-center overflow-hidden">
+  <!-- Ambient Orbs -->
+  <div class="hero-orb w-[700px] h-[700px] bg-primary/15 top-[-250px] left-[-150px]"></div>
+  <div class="hero-orb w-[500px] h-[500px] bg-secondary/12 bottom-[-150px] right-[-80px]" style="animation-delay: -3s;"></div>
+  <div class="hero-orb w-[350px] h-[350px] bg-primary/8 top-[35%] right-[15%]" style="animation-delay: -5s;"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full pt-28 pb-16">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+
+      <!-- Left Column: Text Content -->
+      <div class="text-left">
+        <!-- Status Badge -->
+        <div class="inline-flex items-center gap-3 glass rounded-full px-5 py-2.5 mb-10 reveal float-badge">
+          <span class="relative flex h-2.5 w-2.5">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-tertiary"></span>
+          </span>
+          <span class="text-xs font-label font-medium uppercase tracking-[0.2em] text-white/70">AI Voice Agents Now Available</span>
+        </div>
+
+        <!-- Main Heading -->
+        <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-headline font-bold leading-[0.95] tracking-tighter mb-8 reveal stagger-1">
+          <span class="text-white">AI voice agents</span><br>
+          <span class="text-white">that never miss </span><br class="hidden sm:block">
+          <span class="text-white">a </span><span class="bg-gradient-to-r from-primary via-secondary to-primary bg-[length:200%_auto] animate-[gradientShift_4s_ease-in-out_infinite] bg-clip-text text-transparent">call</span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="text-lg md:text-xl text-white/50 max-w-lg mb-10 leading-relaxed reveal stagger-2">
+          Deploy an elite AI voice agent that sounds human, works 24/7, and converts callers into customers on autopilot.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row items-start gap-4 mb-12 reveal stagger-3">
+          <a href="#contact" class="shimmer group inline-flex items-center gap-3 text-white font-bold px-10 py-4 rounded-full text-lg hover:scale-105 active:scale-95 transition-all duration-300" style="background: #4da8ba; box-shadow: 0 0 25px rgba(77,168,186,0.4);">
+            <span class="material-symbols-outlined text-xl">call</span>
+            Book an Intro Call
+          </a>
+          <a href="#services" class="group inline-flex items-center gap-2 glass px-8 py-4 rounded-full text-white/80 hover:text-white font-medium transition-all hover:bg-white/10">
+            See How It Works
+            <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </a>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="flex items-center gap-6 text-white/30 text-xs font-label tracking-wider reveal stagger-4">
+          <span class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm text-tertiary/70">lock</span>
+            SOC 2 Compliant
+          </span>
+          <span class="text-white/10">|</span>
+          <span class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm text-primary/70">verified</span>
+            99.7% Uptime
+          </span>
+          <span class="text-white/10">|</span>
+          <span class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm text-secondary/70">schedule</span>
+            24/7 Coverage
+          </span>
+        </div>
+      </div>
+
+      <!-- Right Column: Visual -->
+      <div class="hidden lg:flex justify-center items-center reveal-right">
+        <div class="hero-visual">
+          <!-- Orbiting rings -->
+          <div class="orbit-ring ring-3"></div>
+          <div class="orbit-ring ring-2">
+            <div class="orbit-dot dot-purple"></div>
+          </div>
+          <div class="orbit-ring ring-1">
+            <div class="orbit-dot"></div>
+            <div class="orbit-dot dot-green"></div>
+          </div>
+
+          <!-- Incoming Call Signal (left) -->
+          <div class="call-signal">
+            <div class="call-icon-wrap">
+              <div class="call-pulse"></div>
+              <div class="call-pulse"></div>
+              <div class="call-pulse"></div>
+              <span class="material-symbols-outlined">call</span>
+            </div>
+            <span class="call-label">Incoming Call</span>
+          </div>
+
+          <!-- Signal path: call → agent -->
+          <div class="signal-path"></div>
+
+          <!-- AI Agent Avatar (center) -->
+          <div class="agent-core">
+            <div class="voice-pulse"></div>
+            <div class="voice-pulse"></div>
+            <div class="voice-pulse"></div>
+            <div class="agent-avatar">
+              <img src="agent-avatar.png" alt="AI Agent" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+              <!-- Fallback if no image file -->
+              <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;background:linear-gradient(145deg,#1a1e2a,#0d0f14);">
+                <span class="material-symbols-outlined" style="font-size:56px;background:linear-gradient(135deg,#7ce0f6,#aa8aff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">support_agent</span>
+              </div>
+              <div class="agent-status"></div>
+            </div>
+            <span class="agent-label">AI Agent Active</span>
+          </div>
+
+          <!-- Signal path: agent → outcomes -->
+          <div class="signal-path-out"></div>
+
+          <!-- Outcome Cards (right) -->
+          <div class="outcome-stack">
+            <div class="outcome-card">
+              <span class="material-symbols-outlined text-tertiary">calendar_month</span>
+              <span class="outcome-text">Appointment Booked</span>
+              <span class="outcome-sub">3:30pm</span>
+            </div>
+            <div class="outcome-card">
+              <span class="material-symbols-outlined text-primary">verified</span>
+              <span class="outcome-text">Lead Qualified</span>
+              <span class="outcome-sub">Score: 92</span>
+            </div>
+            <div class="outcome-card">
+              <span class="material-symbols-outlined text-secondary">trending_up</span>
+              <span class="outcome-text">+$2,400 Revenue</span>
+              <span class="outcome-sub">Captured</span>
+            </div>
+            <div class="outcome-card">
+              <span class="material-symbols-outlined text-primary">attach_money</span>
+              <span class="outcome-text">+$3,500 Revenue</span>
+              <span class="outcome-sub">Converted</span>
+            </div>
+            <div class="outcome-card">
+              <span class="material-symbols-outlined text-tertiary">event_available</span>
+              <span class="outcome-text">Calendar Invite Sent</span>
+              <span class="outcome-sub">Confirmed</span>
+            </div>
+            <div class="outcome-card">
+              <span class="material-symbols-outlined text-secondary">sms</span>
+              <span class="outcome-text">SMS Maps Link Sent</span>
+              <span class="outcome-sub">Delivered</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Logo Bar -->
+    <div class="mt-20 pt-10 border-t border-white/5 reveal stagger-5">
+      <div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-0">
+        <p class="text-xs font-label text-white/25 tracking-wider sm:mr-10 shrink-0">Used by 50+ businesses</p>
+        <div class="flex items-center justify-center flex-wrap gap-8 sm:gap-12 w-full opacity-20">
+          <div class="text-white font-headline font-bold text-lg tracking-tight">TechCo</div>
+          <div class="text-white font-headline font-bold text-lg tracking-tight">Meridian</div>
+          <div class="text-white font-headline font-bold text-lg tracking-tight">Apex.io</div>
+          <div class="hidden sm:block text-white font-headline font-bold text-lg tracking-tight">Flux</div>
+          <div class="hidden md:block text-white font-headline font-bold text-lg tracking-tight">Helios</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ========== PROBLEM / STAT SECTION ========== -->
+<section class="py-32 relative overflow-hidden" id="results">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+      <!-- Left: Copy -->
+      <div class="reveal-left">
+        <span class="text-xs font-label font-semibold uppercase tracking-[0.25em] text-primary/70 mb-4 block">The Problem</span>
+        <h2 class="text-4xl md:text-5xl lg:text-6xl font-headline font-bold mb-8 leading-[1.05] tracking-tight text-white">
+          <span class="text-primary">40%</span> of calls<br>go unanswered.
+        </h2>
+        <p class="text-lg text-white/55 mb-8 leading-relaxed">
+          That's real money spent on marketing and lead generation, only to be lost to voicemail. Most businesses don't even realise the scale of this silent revenue leak.
+        </p>
+        <div class="glass rounded-2xl p-6 gradient-border">
+          <p class="text-on-surface-variant/90 leading-relaxed italic">
+            "Our AI voice agents answer every call, service every customer, and book appointments 24/7 &mdash; adding thousands back to your bottom line."
+          </p>
+        </div>
+      </div>
+
+      <!-- Right: Visual -->
+      <div class="flex justify-center reveal-right">
+        <div class="relative">
+          <!-- Ring Chart -->
+          <div class="w-72 h-72 md:w-80 md:h-80 relative">
+            <svg class="w-full h-full -rotate-90" viewBox="0 0 280 280">
+              <!-- Background Ring -->
+              <circle cx="140" cy="140" r="120" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="22"/>
+              <!-- Progress Ring -->
+              <circle id="statRing" class="counter-ring" cx="140" cy="140" r="120" fill="none" stroke="url(#ringGradient)" stroke-width="22" stroke-linecap="round" stroke-dasharray="754" stroke-dashoffset="754" filter="url(#ringGlow)"/>
+              <defs>
+                <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#7ce0f6"/>
+                  <stop offset="50%" stop-color="#aa8aff"/>
+                  <stop offset="100%" stop-color="#b5ffc2"/>
+                </linearGradient>
+                <filter id="ringGlow">
+                  <feGaussianBlur stdDeviation="4" result="blur"/>
+                  <feMerge>
+                    <feMergeNode in="blur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span id="statNumber" class="text-7xl font-headline font-bold text-primary text-glow-primary">0</span>
+              <span class="text-xl font-headline text-primary">%</span>
+              <p class="text-xs font-label uppercase tracking-[0.2em] text-on-surface-variant/50 mt-2">Calls Lost</p>
+            </div>
+          </div>
+
+          <!-- Floating Stat Cards -->
+          <div class="absolute -top-4 -right-4 glass rounded-2xl p-4 float-badge glow-primary" style="animation-delay: -1s;">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-tertiary text-lg">trending_up</span>
+              <span class="text-sm font-bold text-white">+$47K</span>
+            </div>
+            <p class="text-[0.6rem] font-label text-on-surface-variant/60 mt-1">Avg. Revenue Recovered</p>
+          </div>
+          <div class="absolute -bottom-4 -left-4 glass rounded-2xl p-4 float-badge" style="animation-delay: -2s;">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-lg">schedule</span>
+              <span class="text-sm font-bold text-white">24/7</span>
+            </div>
+            <p class="text-[0.6rem] font-label text-on-surface-variant/60 mt-1">Always Available</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Metric Strip -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-24">
+      <div class="glass rounded-2xl p-6 text-center reveal stagger-1 gradient-border">
+        <div class="text-3xl md:text-4xl font-headline font-bold text-white mb-1">99.7<span class="text-primary">%</span></div>
+        <p class="text-xs font-label uppercase tracking-[0.15em] text-on-surface-variant/60">Uptime</p>
+      </div>
+      <div class="glass rounded-2xl p-6 text-center reveal stagger-2 gradient-border">
+        <div class="text-3xl md:text-4xl font-headline font-bold text-white mb-1">&lt;2<span class="text-primary">s</span></div>
+        <p class="text-xs font-label uppercase tracking-[0.15em] text-on-surface-variant/60">Response Time</p>
+      </div>
+      <div class="glass rounded-2xl p-6 text-center reveal stagger-3 gradient-border">
+        <div class="text-3xl md:text-4xl font-headline font-bold text-white mb-1">50<span class="text-primary">+</span></div>
+        <p class="text-xs font-label uppercase tracking-[0.15em] text-on-surface-variant/60">Businesses Served</p>
+      </div>
+      <div class="glass rounded-2xl p-6 text-center reveal stagger-4 gradient-border">
+        <div class="text-3xl md:text-4xl font-headline font-bold text-white mb-1">4.9<span class="text-primary">/5</span></div>
+        <p class="text-xs font-label uppercase tracking-[0.15em] text-on-surface-variant/60">Client Rating</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SCROLLING MARQUEE ========== -->
+<div class="py-6 overflow-hidden border-y border-white/5 relative">
+  <div class="marquee-track">
+    <span class="flex items-center gap-12 px-6 text-2xl md:text-3xl font-headline font-bold whitespace-nowrap">
+      <span class="text-white">Never miss a call</span>
+      <span class="text-tertiary text-lg">&#10038;</span>
+      <span class="text-white">AI-powered conversations</span>
+      <span class="text-primary text-lg">&#10038;</span>
+      <span class="text-white">24/7 availability</span>
+      <span class="text-secondary text-lg">&#10038;</span>
+      <span class="text-white">Book appointments on autopilot</span>
+      <span class="text-tertiary text-lg">&#10038;</span>
+      <span class="text-white">Convert every lead</span>
+      <span class="text-primary text-lg">&#10038;</span>
+      <span class="text-white">Human-like voice agents</span>
+      <span class="text-secondary text-lg">&#10038;</span>
+    </span>
+    <span class="flex items-center gap-12 px-6 text-2xl md:text-3xl font-headline font-bold whitespace-nowrap" aria-hidden="true">
+      <span class="text-white">Never miss a call</span>
+      <span class="text-tertiary text-lg">&#10038;</span>
+      <span class="text-white">AI-powered conversations</span>
+      <span class="text-primary text-lg">&#10038;</span>
+      <span class="text-white">24/7 availability</span>
+      <span class="text-secondary text-lg">&#10038;</span>
+      <span class="text-white">Book appointments on autopilot</span>
+      <span class="text-tertiary text-lg">&#10038;</span>
+      <span class="text-white">Convert every lead</span>
+      <span class="text-primary text-lg">&#10038;</span>
+      <span class="text-white">Human-like voice agents</span>
+      <span class="text-secondary text-lg">&#10038;</span>
+    </span>
+  </div>
+</div>
+
+<!-- ========== SERVICES SECTION ========== -->
+<section class="py-32 relative overflow-hidden" id="services">
+  <!-- Section background -->
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-surface-container-low/50 to-transparent"></div>
+  <div class="grid-overlay" style="opacity: 0.5;"></div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-6">
+      <div class="reveal">
+        <span class="text-xs font-label font-semibold uppercase tracking-[0.25em] text-primary/70 mb-4 block">What We Build</span>
+        <h2 class="text-4xl md:text-5xl lg:text-6xl font-headline font-bold tracking-tight text-white">Our Services</h2>
+      </div>
+      <div class="glass rounded-full px-5 py-2.5 text-xs font-label uppercase tracking-[0.2em] text-on-surface-variant/70 reveal">
+        3 Core Offerings
+      </div>
+    </div>
+
+    <!-- Service Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Inbound Calls -->
+      <div class="group glass-elevated rounded-3xl p-8 hover:bg-white/[0.04] hover:-translate-y-2 hover:shadow-[0_0_50px_rgba(124,224,246,0.1),0_20px_60px_rgba(0,0,0,0.3)] transition-all duration-500 cursor-pointer reveal stagger-1 gradient-border relative">
+        <!-- Popular badge -->
+        <div class="absolute -top-3 right-6 bg-gradient-to-r from-primary to-secondary text-black text-[0.65rem] font-label font-bold uppercase tracking-wider px-4 py-1.5 rounded-full shadow-[0_0_20px_rgba(124,224,246,0.3)]">
+          Most Popular
+        </div>
+        <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-8 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-500">
+          <span class="material-symbols-outlined text-primary text-2xl">call_received</span>
+        </div>
+        <h3 class="text-2xl font-headline font-bold mb-4 text-white group-hover:text-primary transition-colors">Inbound Calls</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-8">
+          Human-like virtual receptionists that answer every incoming call with natural conversation. 24/7 availability, zero wait times.
+        </p>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center gap-3 text-sm text-on-surface-variant/80">
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>
+            Appointment booking
+          </li>
+          <li class="flex items-center gap-3 text-sm text-on-surface-variant/80">
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>
+            FAQ handling
+          </li>
+          <li class="flex items-center gap-3 text-sm text-on-surface-variant/80">
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>
+            Call routing & transfers
+          </li>
+        </ul>
+        <a href="#contact" class="inline-flex items-center gap-2 text-primary text-sm font-semibold group-hover:gap-3 transition-all">
+          Get Started <span class="material-symbols-outlined text-base">arrow_forward</span>
+        </a>
+      </div>
+
+      <!-- Outbound Calls -->
+      <div class="group glass-elevated rounded-3xl p-8 hover:bg-white/[0.04] hover:-translate-y-2 hover:shadow-[0_0_50px_rgba(170,138,255,0.12),0_20px_60px_rgba(0,0,0,0.3)] transition-all duration-500 cursor-pointer reveal stagger-2 gradient-border relative">
+        <div class="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center mb-8 group-hover:bg-secondary/20 group-hover:scale-110 transition-all duration-500">
+          <span class="material-symbols-outlined text-secondary text-2xl">call_made</span>
+        </div>
+        <h3 class="text-2xl font-headline font-bold mb-4 text-white group-hover:text-secondary transition-colors">Outbound Calls</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-8">
+          Automated outreach at scale. Reminders, follow-ups, lead qualification, and cold calling &mdash; all with natural AI conversation.
+        </p>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center gap-3 text-sm text-on-surface-variant/80">
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>
+            Lead qualification
+          </li>
+          <li class="flex items-center gap-3 text-sm text-on-surface-variant/80">
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>
+            Appointment reminders
+          </li>
+          <li class="flex items-center gap-3 text-sm text-on-surface-variant/80">
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>
+            Follow-up sequences
+          </li>
+        </ul>
+        <a href="#contact" class="inline-flex items-center gap-2 text-secondary text-sm font-semibold group-hover:gap-3 transition-all">
+          Get Started <span class="material-symbols-outlined text-base">arrow_forward</span>
+        </a>
+      </div>
+
+      <!-- Support & Maintenance -->
+      <div class="group glass-elevated rounded-3xl p-8 hover:bg-white/[0.04] hover:-translate-y-2 hover:shadow-[0_0_50px_rgba(181,255,194,0.1),0_20px_60px_rgba(0,0,0,0.3)] transition-all duration-500 cursor-pointer reveal stagger-3 gradient-border">
+        <div class="w-14 h-14 rounded-2xl bg-tertiary/10 flex items-center justify-center mb-8 group-hover:bg-tertiary/20 group-hover:scale-110 transition-all duration-500">
+          <span class="material-symbols-outlined text-tertiary text-2xl">support_agent</span>
+        </div>
+        <h3 class="text-2xl font-headline font-bold mb-4 text-white group-hover:text-tertiary transition-colors">Support & Maintenance</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-8">
+          Continuous optimization, performance monitoring, and updates to keep your AI agents performing at their peak.
+        </p>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center gap-3 text-sm text-on-surface-variant/80">
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>
+            Performance analytics
+          </li>
+          <li class="flex items-center gap-3 text-sm text-on-surface-variant/80">
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>
+            Script refinement
+          </li>
+          <li class="flex items-center gap-3 text-sm text-on-surface-variant/80">
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>
+            Priority support
+          </li>
+        </ul>
+        <a href="#contact" class="inline-flex items-center gap-2 text-tertiary text-sm font-semibold group-hover:gap-3 transition-all">
+          Get Started <span class="material-symbols-outlined text-base">arrow_forward</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ========== PROCESS SECTION (VERTICAL TABS) ========== -->
+<section class="py-32 relative" id="process">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
+      <!-- Left Column: Tabs -->
+      <div class="lg:col-span-5 flex flex-col justify-center order-2 lg:order-1 pt-4 reveal-left" style="min-height: 500px;">
+        <div class="mb-12">
+          <h2 class="tracking-tighter text-3xl font-medium md:text-4xl lg:text-5xl text-white font-headline font-bold">
+            Five Steps to Launch
+          </h2>
+          <span class="text-[10px] font-label font-medium text-on-surface-variant/50 uppercase tracking-[0.3em] block ml-0.5 mt-1">
+            (HOW IT WORKS)
+          </span>
+        </div>
+
+        <div id="vtabList" class="flex flex-col pl-5">
+          <!-- Tab buttons generated by JS -->
+        </div>
+      </div>
+
+      <!-- Right Column: Content display -->
+      <div class="lg:col-span-7 flex flex-col justify-end h-full order-1 lg:order-2 reveal-right">
+        <div id="vtabContent" class="vtab-content-area">
+          <!-- Slides generated by JS -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ========== INTEGRATIONS HUB ========== -->
+<section class="py-32 relative overflow-hidden">
+  <!-- Grid overlay -->
+  <div class="grid-overlay"></div>
+  <!-- Ambient glow -->
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-secondary/8 rounded-full blur-[150px] pointer-events-none"></div>
+
+  <div class="max-w-6xl mx-auto px-6 lg:px-8 relative z-10">
+    <!-- Header -->
+    <div class="text-center mb-6 reveal">
+      <span class="text-xs font-label font-semibold uppercase tracking-[0.25em] text-primary/70 mb-4 block">Zero friction, maximum flexibility.</span>
+      <h2 class="text-4xl md:text-5xl lg:text-6xl font-headline font-bold tracking-tight text-white mb-4">
+        Works where <span class="text-primary font-extrabold">you</span> work
+      </h2>
+    </div>
+
+    <!-- Hub Visual -->
+    <div class="relative w-full" style="height: 500px;">
+      <!-- Center logo -->
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div class="hub-center" style="padding: 0; overflow: hidden;">
+          <img src="NxtLayrAI Small Logo.png" alt="NxtLayr" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <!-- Glow ring -->
+        <div class="absolute inset-[-30px] rounded-full border border-primary/10"></div>
+        <div class="absolute inset-[-60px] rounded-full border border-secondary/5"></div>
+      </div>
+
+      <!-- Connection lines + Tool badges (positioned radially) -->
+      <!-- Salesforce - top-left -->
+      <div class="hub-line reveal" style="width: 180px; transform: rotate(-145deg); top: calc(50% - 0.5px); left: 50%;"><div class="hub-dot"></div></div>
+      <div class="hub-tool reveal stagger-1" style="top: 12%; left: 5%;">
+        <div class="tool-icon" style="background: #00A1E0; padding: 8px;">
+          <svg viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M10.006 5.907a4.078 4.078 0 0 1 3.058-1.378c1.596 0 2.986.918 3.658 2.254a4.678 4.678 0 0 1 1.904-.403c2.6 0 4.706 2.122 4.706 4.74s-2.106 4.74-4.706 4.74a4.67 4.67 0 0 1-1.4-.214 3.766 3.766 0 0 1-3.454 2.268c-.618 0-1.204-.149-1.72-.414a4.493 4.493 0 0 1-3.898 2.274c-1.88 0-3.478-1.152-4.156-2.79a3.472 3.472 0 0 1-.578.048C1.88 17.032 0 15.14 0 12.81c0-1.564.856-2.93 2.124-3.656A4.042 4.042 0 0 1 1.88 7.85c0-2.234 1.81-4.044 4.044-4.044 1.248 0 2.364.566 3.106 1.454l-.024.647z"/></svg>
+        </div>
+        Salesforce
+      </div>
+
+      <!-- HubSpot - top -->
+      <div class="hub-line reveal" style="width: 160px; transform: rotate(-95deg); top: calc(50% - 0.5px); left: 50%;"><div class="hub-dot"></div></div>
+      <div class="hub-tool reveal stagger-2" style="top: 5%; left: 50%; transform: translateX(-50%);">
+        <div class="tool-icon" style="background: #ff7a59; padding: 7px;">
+          <svg viewBox="0 0 24 24" fill="white" width="26" height="26"><path d="M18.164 7.93V5.084a2.198 2.198 0 0 0 1.267-1.984v-.066A2.198 2.198 0 0 0 17.233.836h-.066a2.198 2.198 0 0 0-2.198 2.198v.066c0 .87.51 1.62 1.244 1.974v2.858a6.027 6.027 0 0 0-2.897 1.477l-7.63-5.94a2.36 2.36 0 0 0 .072-.564 2.382 2.382 0 1 0-2.382 2.382c.474 0 .91-.143 1.278-.384l7.49 5.83a6.06 6.06 0 0 0-.504 2.42 6.06 6.06 0 0 0 .56 2.554l-2.251 2.252a2.1 2.1 0 0 0-.625-.104 2.133 2.133 0 1 0 2.133 2.133c0-.222-.04-.434-.104-.633l2.206-2.206a6.07 6.07 0 1 0 4.04-10.243z"/></svg>
+        </div>
+        HubSpot
+      </div>
+
+      <!-- Slack - top-right -->
+      <div class="hub-line reveal" style="width: 180px; transform: rotate(-35deg); top: calc(50% - 0.5px); left: 50%;"><div class="hub-dot"></div></div>
+      <div class="hub-tool reveal stagger-1" style="top: 12%; right: 5%;">
+        <div class="tool-icon" style="background: #4A154B; padding: 8px;">
+          <svg viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zm1.271 0a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zm0 1.271a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zm10.122 2.521a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zm-1.268 0a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zm-2.523 10.122a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zm0-1.268a2.527 2.527 0 0 1-2.52-2.523 2.527 2.527 0 0 1 2.52-2.52h6.313A2.528 2.528 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg>
+        </div>
+        Slack
+      </div>
+
+      <!-- Calendly - right -->
+      <div class="hub-line reveal" style="width: 180px; transform: rotate(10deg); top: calc(50% - 0.5px); left: 50%;"><div class="hub-dot"></div></div>
+      <div class="hub-tool reveal stagger-3" style="top: 45%; right: 0%;">
+        <div class="tool-icon" style="background: #006BFF; padding: 8px;">
+          <svg viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M19.655 14.262c-.032.162-.096.322-.192.466a4.108 4.108 0 0 1-2.798 1.898 4.108 4.108 0 0 1-3.254-.718l-.066-.048a.875.875 0 0 0-1.025.002 4.108 4.108 0 0 1-3.256.714 4.108 4.108 0 0 1-2.796-1.898c-.096-.144-.16-.304-.194-.468a.652.652 0 0 0-.644-.538H3.2a.652.652 0 0 0-.644.76c.066.334.178.658.334.964A6.108 6.108 0 0 0 7.05 18.24a6.108 6.108 0 0 0 4.95-1.012 6.108 6.108 0 0 0 4.95 1.012 6.108 6.108 0 0 0 4.16-2.826c.156-.306.268-.63.334-.964a.652.652 0 0 0-.644-.76h-2.23a.652.652 0 0 0-.644.538l-.27.034zM12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zM0 12C0 5.373 5.373 0 12 0s12 5.373 12 12-5.373 12-12 12S0 18.627 0 12z"/></svg>
+        </div>
+        Calendly
+      </div>
+
+      <!-- Zapier - bottom-right -->
+      <div class="hub-line reveal" style="width: 170px; transform: rotate(40deg); top: calc(50% - 0.5px); left: 50%;"><div class="hub-dot"></div></div>
+      <div class="hub-tool reveal stagger-2" style="bottom: 15%; right: 8%;">
+        <div class="tool-icon" style="background: #FF4A00; padding: 7px;">
+          <svg viewBox="0 0 24 24" fill="white" width="26" height="26"><path d="M15.535 8.465l-1.406 1.406L12 7.743 9.871 9.871l-1.406-1.406L12 5.222l3.535 3.243zm-3.535 7.792l-2.129-2.128 1.406-1.406L12 13.457l.723-.734 1.406 1.406L12 16.257zm4.535-4.535L14.407 12l2.128-2.129 1.406 1.406-.723.723.723.723-1.406 1.406zm-9.07 0L9.593 12 7.465 9.871l-1.406 1.406.723.723-.723.723 1.406 1.406zM12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0z"/></svg>
+        </div>
+        Zapier
+      </div>
+
+      <!-- GoHighLevel - bottom-left -->
+      <div class="hub-line reveal" style="width: 170px; transform: rotate(140deg); top: calc(50% - 0.5px); left: 50%;"><div class="hub-dot"></div></div>
+      <div class="hub-tool reveal stagger-3" style="bottom: 15%; left: 5%;">
+        <div class="tool-icon" style="background: #28a745; padding: 6px;">
+          <svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/><path d="M2 17l10 5 10-5" stroke="white" stroke-width="1.5" fill="none"/><path d="M2 12l10 5 10-5" stroke="white" stroke-width="1.5" fill="none"/><path d="M12 2L2 7l10 5 10-5-10-5z" fill="white"/></svg>
+        </div>
+        GoHighLevel
+      </div>
+
+      <!-- Google Calendar - left -->
+      <div class="hub-line reveal" style="width: 170px; transform: rotate(190deg); top: calc(50% - 0.5px); left: 50%;"><div class="hub-dot"></div></div>
+      <div class="hub-tool reveal stagger-2" style="top: 45%; left: 0%;">
+        <div class="tool-icon" style="background: #4285F4; padding: 7px;">
+          <svg viewBox="0 0 24 24" fill="white" width="26" height="26"><path d="M19.5 3h-1V1.5a.5.5 0 0 0-1 0V3h-11V1.5a.5.5 0 0 0-1 0V3h-1A2.5 2.5 0 0 0 2 5.5v14A2.5 2.5 0 0 0 4.5 22h15a2.5 2.5 0 0 0 2.5-2.5v-14A2.5 2.5 0 0 0 19.5 3zM20 19.5a.5.5 0 0 1-.5.5h-15a.5.5 0 0 1-.5-.5V9h16v10.5zM11 13h2v2h-2v-2zm-4 0h2v2H7v-2zm8 0h2v2h-2v-2zm-8 4h2v2H7v-2zm4 0h2v2h-2v-2zm4 0h2v2h-2v-2z"/></svg>
+        </div>
+        Google Cal
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ========== TESTIMONIAL / SOCIAL PROOF ========== -->
+<section class="py-24 relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-surface-container-low/30 to-transparent"></div>
+  <div class="max-w-5xl mx-auto px-6 lg:px-8 relative z-10">
+    <div class="glass-elevated rounded-3xl p-10 md:p-16 text-center gradient-border reveal-scale">
+      <div class="flex items-center justify-center gap-1 mb-6">
+        <span class="material-symbols-outlined text-yellow-400 text-3xl" style="font-variation-settings: 'FILL' 1;">star</span>
+        <span class="material-symbols-outlined text-yellow-400 text-3xl" style="font-variation-settings: 'FILL' 1;">star</span>
+        <span class="material-symbols-outlined text-yellow-400 text-3xl" style="font-variation-settings: 'FILL' 1;">star</span>
+        <span class="material-symbols-outlined text-yellow-400 text-3xl" style="font-variation-settings: 'FILL' 1;">star</span>
+        <span class="material-symbols-outlined text-yellow-400 text-3xl" style="font-variation-settings: 'FILL' 1;">star</span>
+      </div>
+      <blockquote class="text-2xl md:text-3xl font-headline font-medium leading-snug text-white/90 mb-10">
+        "In an evolving area Chris is really on top of what things are available and how these can add real value to your business. Highly recommend reaching out to him for further advice."
+      </blockquote>
+      <div class="flex items-center justify-center gap-4">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-black font-bold font-headline">
+          B
+        </div>
+        <div class="text-left">
+          <p class="text-white font-semibold text-sm">Brendan</p>
+          <p class="text-on-surface-variant/60 text-xs font-label uppercase tracking-wider">Director, Scott&amp;Co Accountants</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ========== CONTACT SECTION ========== -->
+<section class="py-32 relative overflow-hidden" id="contact">
+  <!-- Background Decor -->
+  <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[150px] pointer-events-none"></div>
+  <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+      <!-- Left: Info -->
+      <div class="reveal-left">
+        <span class="text-xs font-label font-semibold uppercase tracking-[0.25em] text-primary/70 mb-4 block">Get In Touch</span>
+        <h2 class="text-4xl md:text-5xl lg:text-6xl font-headline font-bold tracking-tight text-white mb-6">
+          Let's Build Your<br><span class="text-primary">AI Agent</span>
+        </h2>
+        <p class="text-lg text-white/55 mb-12 leading-relaxed">
+          Book a free introductory call and we'll show you exactly how AI voice agents can transform your business operations.
+        </p>
+
+        <!-- Info Cards -->
+        <div class="space-y-4 mb-12">
+          <div class="glass rounded-2xl p-5 flex items-center gap-4 hover:bg-white/[0.04] transition-all group">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <span class="material-symbols-outlined text-primary">location_on</span>
+            </div>
+            <div>
+              <p class="text-white font-semibold text-sm">Sydney, Australia</p>
+              <p class="text-on-surface-variant/60 text-xs">Operating globally</p>
+            </div>
+          </div>
+          <div class="glass rounded-2xl p-5 flex items-center gap-4 hover:bg-white/[0.04] transition-all group">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <span class="material-symbols-outlined text-primary">mail</span>
+            </div>
+            <div>
+              <p class="text-white font-semibold text-sm">hello@nxtlayr.ai</p>
+              <p class="text-on-surface-variant/60 text-xs">Response within 24 hours</p>
+            </div>
+          </div>
+          <div class="glass rounded-2xl p-5 flex items-center gap-4 hover:bg-white/[0.04] transition-all group">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <span class="material-symbols-outlined text-primary">schedule</span>
+            </div>
+            <div>
+              <p class="text-white font-semibold text-sm">Mon - Fri, 9am - 6pm AEST</p>
+              <p class="text-on-surface-variant/60 text-xs">AI agents available 24/7</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Social Links -->
+        <div class="flex gap-3">
+          <a href="#" class="w-11 h-11 glass rounded-xl flex items-center justify-center hover:bg-primary/10 hover:border-primary/30 transition-all group">
+            <svg class="w-4 h-4 fill-current text-on-surface-variant/60 group-hover:text-primary transition-colors" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+          </a>
+          <a href="#" class="w-11 h-11 glass rounded-xl flex items-center justify-center hover:bg-primary/10 hover:border-primary/30 transition-all group">
+            <svg class="w-4 h-4 fill-current text-on-surface-variant/60 group-hover:text-primary transition-colors" viewBox="0 0 24 24"><path d="M23.498 6.186c-.273-1.011-1.074-1.812-2.085-2.085-1.841-.497-9.413-.497-9.413-.497s-7.572 0-9.413.497c-1.011.273-1.812 1.074-2.085 2.085-.497 1.841-.497 5.814-.497 5.814s0 3.973.497 5.814c.273 1.011 1.074 1.812 2.085 2.085 1.841.497 9.413.497 9.413.497s7.572 0 9.413-.497c1.011-.273 1.812-1.074 2.085-2.085.497-1.841.497-5.814.497-5.814s0-3.973-.497-5.814zM9.596 15.536v-7.072l6.238 3.536-6.238 3.536z"/></svg>
+          </a>
+          <a href="#" class="w-11 h-11 glass rounded-xl flex items-center justify-center hover:bg-primary/10 hover:border-primary/30 transition-all group">
+            <svg class="w-4 h-4 fill-current text-on-surface-variant/60 group-hover:text-primary transition-colors" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.245 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.332 2.633-1.308 3.608-.975.975-2.242 1.245-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.332-3.608-1.308-.975-.975-1.245-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.332-2.633 1.308-3.608.975-.975 2.242-1.245 3.608-1.308 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </a>
+          <a href="#" class="w-11 h-11 glass rounded-xl flex items-center justify-center hover:bg-primary/10 hover:border-primary/30 transition-all group">
+            <svg class="w-4 h-4 fill-current text-on-surface-variant/60 group-hover:text-primary transition-colors" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: Form -->
+      <div class="reveal-right">
+        <div class="glass-elevated rounded-3xl p-8 md:p-10 gradient-border">
+          <h3 class="text-2xl font-headline font-bold mb-2 text-white">Send a Message</h3>
+          <p class="text-on-surface-variant/70 text-sm mb-8">We'll get back to you within 24 hours.</p>
+
+          <form class="space-y-5" onsubmit="event.preventDefault(); this.querySelector('button').textContent = 'Message Sent!'; this.querySelector('button').classList.add('bg-tertiary'); setTimeout(() => { this.querySelector('button').textContent = 'Send Message'; this.querySelector('button').classList.remove('bg-tertiary'); }, 3000);">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-[0.65rem] font-label font-semibold uppercase tracking-[0.2em] text-on-surface-variant/60 mb-2">Name</label>
+                <input type="text" placeholder="John Doe" class="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/25 focus:ring-0 focus:outline-none focus:border-primary/30 focus:bg-white/[0.08] transition-all"/>
+              </div>
+              <div>
+                <label class="block text-[0.65rem] font-label font-semibold uppercase tracking-[0.2em] text-on-surface-variant/60 mb-2">Email</label>
+                <input type="email" placeholder="john@company.com" class="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/25 focus:ring-0 focus:outline-none focus:border-primary/30 focus:bg-white/[0.08] transition-all"/>
+              </div>
+            </div>
+            <div>
+              <label class="block text-[0.65rem] font-label font-semibold uppercase tracking-[0.2em] text-on-surface-variant/60 mb-2">Business Type</label>
+              <select class="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white focus:ring-0 focus:outline-none focus:border-primary/30 focus:bg-white/[0.08] transition-all appearance-none cursor-pointer">
+                <option>Select your business type</option>
+                <option>Healthcare / Medical</option>
+                <option>Real Estate</option>
+                <option>Legal Services</option>
+                <option>Home Services</option>
+                <option>E-Commerce</option>
+                <option>SaaS / Technology</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[0.65rem] font-label font-semibold uppercase tracking-[0.2em] text-on-surface-variant/60 mb-2">Message</label>
+              <textarea placeholder="Tell us about your business and how we can help..." rows="4" class="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/25 focus:ring-0 focus:outline-none focus:border-primary/30 focus:bg-white/[0.08] transition-all resize-none"></textarea>
+            </div>
+            <button type="submit" class="w-full bg-gradient-to-r from-primary to-primary-fixed-dim text-black font-bold py-4 rounded-xl hover:shadow-[0_0_30px_rgba(124,224,246,0.3)] transition-all duration-300 text-sm font-label uppercase tracking-wider shimmer">
+              Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="border-t border-white/5 relative z-10">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+    <div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-12">
+      <!-- Logo & Description -->
+      <div class="max-w-sm">
+        <a href="#" class="flex items-center mb-4">
+          <img src="NxtLayr AI Logo No background.png" alt="NxtLayr AI" class="h-16">
+        </a>
+        <p class="text-on-surface-variant/50 text-sm leading-relaxed">
+          Building practical &amp; effective voice agents that help businesses serve their customers and generate more revenue.
+        </p>
+      </div>
+
+      <!-- Links -->
+      <div class="flex flex-wrap gap-12 md:gap-16">
+        <div>
+          <h5 class="text-[0.65rem] font-label font-bold uppercase tracking-[0.2em] text-on-surface-variant/40 mb-4">Company</h5>
+          <div class="space-y-3">
+            <a href="#" class="block text-sm text-on-surface-variant/60 hover:text-white transition-colors">About</a>
+            <a href="#services" class="block text-sm text-on-surface-variant/60 hover:text-white transition-colors">Services</a>
+            <a href="#process" class="block text-sm text-on-surface-variant/60 hover:text-white transition-colors">Process</a>
+            <a href="#contact" class="block text-sm text-on-surface-variant/60 hover:text-white transition-colors">Contact</a>
+          </div>
+        </div>
+        <div>
+          <h5 class="text-[0.65rem] font-label font-bold uppercase tracking-[0.2em] text-on-surface-variant/40 mb-4">Legal</h5>
+          <div class="space-y-3">
+            <a href="#" class="block text-sm text-on-surface-variant/60 hover:text-white transition-colors">Privacy Policy</a>
+            <a href="#" class="block text-sm text-on-surface-variant/60 hover:text-white transition-colors">Terms of Service</a>
+          </div>
+        </div>
+        <div>
+          <h5 class="text-[0.65rem] font-label font-bold uppercase tracking-[0.2em] text-on-surface-variant/40 mb-4">Connect</h5>
+          <div class="space-y-3">
+            <a href="#" class="block text-sm text-on-surface-variant/60 hover:text-white transition-colors">LinkedIn</a>
+            <a href="#" class="block text-sm text-on-surface-variant/60 hover:text-white transition-colors">YouTube</a>
+            <a href="#" class="block text-sm text-on-surface-variant/60 hover:text-white transition-colors">Instagram</a>
+            <a href="#" class="block text-sm text-on-surface-variant/60 hover:text-white transition-colors">X / Twitter</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+      <span class="text-[0.65rem] font-label text-on-surface-variant/30 tracking-wider">&copy; 2026 NxtLayr AI. All rights reserved.</span>
+      <span class="text-[0.65rem] font-label text-on-surface-variant/20 tracking-wider">Sydney, Australia</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ========== JAVASCRIPT ========== -->
+<script>
+// ===== STARFIELD =====
+(function() {
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  const STAR_COUNT = 350;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function createStars() {
+    stars = [];
+    for (let i = 0; i < STAR_COUNT; i++) {
+      const isBright = Math.random() < 0.15;
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        baseX: 0,
+        baseY: 0,
+        size: isBright ? Math.random() * 2.5 + 1.2 : Math.random() * 1.8 + 0.4,
+        opacity: isBright ? Math.random() * 0.4 + 0.5 : Math.random() * 0.5 + 0.15,
+        twinkleSpeed: Math.random() * 0.8 + 0.2,
+        phase: Math.random() * Math.PI * 2,
+        driftX: (Math.random() - 0.5) * 0.15,
+        driftY: (Math.random() - 0.5) * 0.1,
+        driftPhase: Math.random() * Math.PI * 2,
+        driftRadius: Math.random() * 20 + 5,
+        isBright: isBright,
+        color: Math.random() < 0.35
+          ? [255, 150, 60]     // orange
+          : Math.random() < 0.5
+            ? [255, 120, 180]  // pink
+            : [100, 180, 255]  // blue
+      });
+    }
+    stars.forEach(s => { s.baseX = s.x; s.baseY = s.y; });
+  }
+
+  function draw(time) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const t = time * 0.001;
+
+    stars.forEach(s => {
+      // Drift motion - gentle floating
+      s.x = s.baseX + Math.sin(t * 0.3 + s.driftPhase) * s.driftRadius * s.driftX;
+      s.y = s.baseY + Math.cos(t * 0.2 + s.driftPhase) * s.driftRadius * s.driftY;
+
+      // Wrap around
+      if (s.x < -5) s.baseX += canvas.width + 10;
+      if (s.x > canvas.width + 5) s.baseX -= canvas.width + 10;
+      if (s.y < -5) s.baseY += canvas.height + 10;
+      if (s.y > canvas.height + 5) s.baseY -= canvas.height + 10;
+
+      // Twinkle
+      const twinkle = Math.sin(t * s.twinkleSpeed + s.phase) * 0.4 + 0.6;
+      const alpha = s.opacity * twinkle;
+
+      const [r, g, b] = s.color;
+
+      // Glow for bright stars
+      if (s.isBright) {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.size * 3, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha * 0.08})`;
+        ctx.fill();
+      }
+
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  createStars();
+  requestAnimationFrame(draw);
+  window.addEventListener('resize', () => { resize(); createStars(); });
+})();
+
+// ===== NAV SCROLL EFFECT =====
+(function() {
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+  });
+})();
+
+// ===== MOBILE MENU =====
+(function() {
+  const menu = document.getElementById('mobileMenu');
+  const toggle = document.getElementById('menuToggle');
+  const close = document.getElementById('menuClose');
+  const links = menu.querySelectorAll('.mobile-nav-link');
+
+  toggle.addEventListener('click', () => menu.classList.add('open'));
+  close.addEventListener('click', () => menu.classList.remove('open'));
+  links.forEach(l => l.addEventListener('click', () => menu.classList.remove('open')));
+})();
+
+// ===== SCROLL REVEAL =====
+(function() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
+    observer.observe(el);
+  });
+})();
+
+// ===== STAT COUNTER ANIMATION =====
+(function() {
+  const statSection = document.getElementById('results');
+  const statNumber = document.getElementById('statNumber');
+  const statRing = document.getElementById('statRing');
+  let animated = false;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !animated) {
+        animated = true;
+        // Animate number
+        let current = 0;
+        const target = 40;
+        const duration = 1500;
+        const start = performance.now();
+
+        function animateCount(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          current = Math.round(eased * target);
+          statNumber.textContent = current;
+          if (progress < 1) requestAnimationFrame(animateCount);
+        }
+        requestAnimationFrame(animateCount);
+
+        // Animate ring (40% = 0.4 * 754 = ~301.6 offset from full)
+        statRing.style.strokeDashoffset = 754 - (754 * 0.4);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  observer.observe(statSection);
+})();
+
+// ===== VERTICAL TABS (PROCESS SECTION) =====
+(function() {
+  const STEPS = [
+    {
+      id: '01',
+      title: 'Discovery',
+      description: 'We learn your business, identify opportunities, and plan your AI voice agent strategy.',
+      icon: 'chat',
+      color: 'from-primary/20 to-primary/5',
+      iconColor: 'text-primary'
+    },
+    {
+      id: '02',
+      title: 'Flow Design',
+      description: 'We map every conversation path your AI agent will handle for seamless interactions.',
+      icon: 'account_tree',
+      color: 'from-primary/20 to-primary/5',
+      iconColor: 'text-primary'
+    },
+    {
+      id: '03',
+      title: 'Fine-Tuning',
+      description: 'We refine until your agent sounds like a natural member of your team.',
+      icon: 'tune',
+      color: 'from-secondary/20 to-secondary/5',
+      iconColor: 'text-secondary'
+    },
+    {
+      id: '04',
+      title: 'Go Live',
+      description: 'Your agent starts handling calls instantly with zero downtime.',
+      icon: 'rocket_launch',
+      color: 'from-tertiary/20 to-tertiary/5',
+      iconColor: 'text-tertiary'
+    },
+    {
+      id: '05',
+      title: 'Optimize',
+      description: 'We continuously monitor and improve performance for lasting growth.',
+      icon: 'trending_up',
+      color: 'from-primary/20 to-secondary/5',
+      iconColor: 'text-primary'
+    }
+  ];
+
+  const AUTO_PLAY_DURATION = 5000;
+  let activeIndex = 0;
+  let isPaused = false;
+  let interval = null;
+
+  const tabList = document.getElementById('vtabList');
+  const contentArea = document.getElementById('vtabContent');
+
+  // Build tab buttons
+  STEPS.forEach((step, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'vtab-btn' + (i === 0 ? ' active' : '');
+    btn.innerHTML = `
+      <div class="vtab-progress-track"><div class="vtab-progress-bar"></div></div>
+      <div class="flex items-start gap-4">
+        <span class="vtab-num font-label font-medium mt-1">/${step.id}</span>
+        <div class="flex flex-col gap-2 flex-1">
+          <span class="vtab-title font-headline tracking-tight">${step.title}</span>
+          <div class="vtab-desc">
+            <p class="text-on-surface-variant text-sm md:text-base leading-relaxed max-w-sm pb-2">${step.description}</p>
+          </div>
+        </div>
+      </div>
+    `;
+    btn.addEventListener('click', () => {
+      if (i === activeIndex) return;
+      setActive(i);
+      isPaused = false;
+      resetAutoPlay();
+    });
+    tabList.appendChild(btn);
+  });
+
+  // Build content slides
+  STEPS.forEach((step, i) => {
+    const slide = document.createElement('div');
+    slide.className = 'vtab-slide' + (i === 0 ? ' active' : '');
+    slide.innerHTML = `
+      <div class="w-24 h-24 md:w-28 md:h-28 rounded-3xl bg-gradient-to-br ${step.color} border border-white/10 flex items-center justify-center mb-8 transition-all duration-500">
+        <span class="material-symbols-outlined ${step.iconColor} text-5xl md:text-6xl">${step.icon}</span>
+      </div>
+      <div class="text-[0.65rem] font-label font-bold text-primary/60 mb-3 uppercase tracking-[0.2em]">Step ${step.id}</div>
+      <h4 class="text-2xl md:text-3xl font-headline font-bold mb-4 text-white">${step.title}</h4>
+      <p class="text-on-surface-variant text-sm md:text-base leading-relaxed max-w-md text-center">${step.description}</p>
+    `;
+    contentArea.appendChild(slide);
+  });
+
+  function setActive(index) {
+    const tabs = tabList.querySelectorAll('.vtab-btn');
+    const slides = contentArea.querySelectorAll('.vtab-slide');
+
+    tabs.forEach((t, i) => {
+      t.classList.toggle('active', i === index);
+      // Reset progress bar animation by forcing reflow
+      if (i === index) {
+        const bar = t.querySelector('.vtab-progress-bar');
+        bar.style.animation = 'none';
+        bar.offsetHeight; // force reflow
+        bar.style.animation = '';
+      }
+    });
+    slides.forEach((s, i) => s.classList.toggle('active', i === index));
+    activeIndex = index;
+  }
+
+  function resetAutoPlay() {
+    clearInterval(interval);
+    interval = setInterval(() => {
+      if (!isPaused) {
+        setActive((activeIndex + 1) % STEPS.length);
+      }
+    }, AUTO_PLAY_DURATION);
+  }
+
+  // Pause on hover
+  const section = document.getElementById('process');
+  section.addEventListener('mouseenter', () => { isPaused = true; });
+  section.addEventListener('mouseleave', () => { isPaused = false; });
+
+  // Only start autoplay when section scrolls into view
+  let hasStarted = false;
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !hasStarted) {
+        hasStarted = true;
+        // Add started class to enable progress bar animations
+        tabList.classList.add('vtab-started');
+        // Reset to step 1 and start fresh
+        setActive(0);
+        resetAutoPlay();
+        sectionObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.2 });
+  sectionObserver.observe(section);
+})();
+
+// ===== SMOOTH SCROLL FOR ANCHOR LINKS =====
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
