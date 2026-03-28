@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>AI Voice Agents for Body Shops | NxtLayr AI × iBodyShop</title>
+  <link rel="icon" type="image/png" href="NxtLayrAI Small Logo.png">
+  <meta name="description" content="AI voice agents purpose-built for body shops. Integrates directly with iBodyShop to answer every call, update customers on repair status, and book new jobs 24/7.">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container-highest": "#262626",
+            "surface-container-lowest": "#000000",
+            "primary-fixed-dim": "#6dd1e8",
+            "secondary-fixed-dim": "#cdb9ff",
+            "primary-container": "#1b92a7",
+            "inverse-primary": "#006979",
+            "on-primary-fixed": "#003a44",
+            "on-error-container": "#ffa8a3",
+            "tertiary-fixed": "#3fff8b",
+            "on-error": "#490006",
+            "primary-dim": "#6dd1e8",
+            "secondary-container": "#6200ea",
+            "inverse-surface": "#fcf9f8",
+            "on-primary": "#004f5c",
+            "error-dim": "#d7383b",
+            "background": "#0a0a0a",
+            "outline": "#767575",
+            "surface-container": "#141414",
+            "surface": "#0a0a0a",
+            "tertiary-fixed-dim": "#24f07e",
+            "error": "#ff716c",
+            "on-tertiary-container": "#005d2c",
+            "surface-container-low": "#111111",
+            "tertiary-container": "#3fff8b",
+            "surface-container-high": "#1a1a1a",
+            "primary": "#7ce0f6",
+            "outline-variant": "#484848",
+            "on-surface": "#f0f0f0",
+            "on-secondary-fixed-variant": "#6000e5",
+            "secondary": "#aa8aff",
+            "on-primary-container": "#00272e",
+            "surface-tint": "#7ce0f6",
+            "on-secondary": "#270068",
+            "surface-variant": "#1e1e1e",
+            "on-secondary-fixed": "#3f009c",
+            "on-primary-fixed-variant": "#005967",
+            "secondary-fixed": "#d9caff",
+            "on-secondary-container": "#e9deff",
+            "tertiary": "#b5ffc2",
+            "surface-dim": "#0a0a0a",
+            "secondary-dim": "#844eff",
+            "on-surface-variant": "#999999",
+            "on-tertiary-fixed": "#004820",
+            "on-tertiary-fixed-variant": "#006832",
+            "tertiary-dim": "#24f07e",
+            "primary-fixed": "#7ce0f6",
+            "surface-bright": "#2c2c2c",
+            "on-tertiary": "#006731",
+            "error-container": "#9f0519",
+            "inverse-on-surface": "#565555",
+            "on-background": "#f0f0f0"
+          },
+          fontFamily: {
+            "headline": ["Space Grotesk", "sans-serif"],
+            "body": ["Manrope", "sans-serif"],
+            "label": ["Inter", "sans-serif"]
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { overflow-x: hidden; }
+    ::selection { background: rgba(124, 224, 246, 0.25); }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    }
+
+    /* ========== STARFIELD ========== */
+    #starfield {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0; pointer-events: none;
+    }
+
+    /* ========== LIGHT FILTER ========== */
+    .light-filter {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1; pointer-events: none; overflow: hidden;
+    }
+    .light-filter::before {
+      content: '';
+      position: absolute; top: -30%; left: 50%;
+      transform: translateX(-50%);
+      width: 160%; height: 110%;
+      background: conic-gradient(
+        from 180deg at 50% 0%,
+        transparent 28%, rgba(124,224,246,0.07) 33%, rgba(124,224,246,0.03) 36%,
+        transparent 39%, transparent 42%, rgba(170,138,255,0.06) 45%,
+        rgba(170,138,255,0.02) 48%, transparent 51%, transparent 53%,
+        rgba(124,224,246,0.05) 56%, rgba(124,224,246,0.02) 59%,
+        transparent 62%, transparent 64%, rgba(255,255,255,0.04) 67%, transparent 72%
+      );
+      filter: blur(30px);
+    }
+    .light-filter::after {
+      content: '';
+      position: absolute; top: -15%; left: 50%;
+      transform: translateX(-50%);
+      width: 90%; height: 75%;
+      background: radial-gradient(ellipse 70% 55% at 50% 0%,
+        rgba(124,224,246,0.1) 0%, rgba(170,138,255,0.05) 30%, transparent 65%);
+      filter: blur(25px);
+    }
+
+    /* ========== SECTION DIVIDER ========== */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(124,224,246,0.15) 30%, rgba(170,138,255,0.15) 70%, transparent);
+      margin: 0 auto; max-width: 80%;
+    }
+
+    /* ========== GLASSMORPHISM ========== */
+    .glass {
+      background: rgba(20,20,20,0.55);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .glass-elevated {
+      background: rgba(26,26,26,0.65);
+      backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* ========== GLOW ========== */
+    .glow-primary { box-shadow: 0 0 40px rgba(124,224,246,0.15), 0 0 80px rgba(124,224,246,0.05); }
+    .glow-primary-strong { box-shadow: 0 0 30px rgba(124,224,246,0.3), 0 0 60px rgba(124,224,246,0.1); }
+    .glow-secondary { box-shadow: 0 0 40px rgba(170,138,255,0.15), 0 0 80px rgba(170,138,255,0.05); }
+    .text-glow-primary { text-shadow: 0 0 40px rgba(124,224,246,0.3); }
+
+    /* ========== GRADIENT BORDER ========== */
+    .gradient-border { position: relative; }
+    .gradient-border::before {
+      content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px;
+      background: linear-gradient(135deg, rgba(124,224,246,0.3), rgba(170,138,255,0.2), rgba(181,255,194,0.1), transparent 60%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
+    }
+
+    /* ========== SCROLL ANIMATIONS ========== */
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-left { opacity: 0; transform: translateX(-60px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+    .reveal-right { opacity: 0; transform: translateX(60px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+    .reveal-scale { opacity: 0; transform: scale(0.9); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+    .reveal-scale.visible { opacity: 1; transform: scale(1); }
+    .stagger-1 { transition-delay: 0.1s; }
+    .stagger-2 { transition-delay: 0.2s; }
+    .stagger-3 { transition-delay: 0.3s; }
+    .stagger-4 { transition-delay: 0.4s; }
+    .stagger-5 { transition-delay: 0.5s; }
+
+    /* ========== HERO ORB ========== */
+    .hero-orb {
+      position: absolute; border-radius: 50%; filter: blur(80px);
+      pointer-events: none; animation: float 8s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33% { transform: translate(30px,-20px) scale(1.05); }
+      66% { transform: translate(-20px,15px) scale(0.95); }
+    }
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% center; }
+      50% { background-position: 100% center; }
+    }
+
+    /* ========== HERO VISUAL ========== */
+    .hero-visual { position: relative; width: 100%; aspect-ratio: 1; max-width: 640px; }
+
+    /* ========== AI AGENT AVATAR ========== */
+    .agent-core {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      display: flex; flex-direction: column; align-items: center; z-index: 3;
+    }
+    .agent-avatar {
+      width: 140px; height: 140px; border-radius: 50%;
+      position: relative; overflow: hidden;
+      border: 3px solid rgba(124,224,246,0.25);
+      box-shadow: 0 0 80px rgba(124,224,246,0.2), 0 0 160px rgba(170,138,255,0.1), inset 0 0 40px rgba(124,224,246,0.08);
+    }
+    .agent-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .agent-avatar::after {
+      content: ''; position: absolute; inset: 0; border-radius: 50%;
+      background: linear-gradient(135deg, rgba(124,224,246,0.08), rgba(170,138,255,0.12));
+      pointer-events: none;
+    }
+    .agent-status {
+      position: absolute; bottom: 8px; right: 8px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #b5ffc2; border: 3px solid #0a0a0a;
+      box-shadow: 0 0 14px rgba(181,255,194,0.6);
+      animation: statusPulse 2s ease-in-out infinite; z-index: 4;
+    }
+    @keyframes statusPulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 14px rgba(181,255,194,0.6); }
+      50% { opacity: 0.6; box-shadow: 0 0 6px rgba(181,255,194,0.3); }
+    }
+    .agent-label {
+      margin-top: 12px; font-size: 10px; font-family: 'Inter', sans-serif;
+      text-transform: uppercase; letter-spacing: 0.2em; color: rgba(181,255,194,0.7); font-weight: 600;
+    }
+
+    /* ========== VOICE PULSE RINGS ========== */
+    .voice-pulse {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%); border-radius: 50%;
+      border: 1.5px solid rgba(124,224,246,0.2);
+      animation: voicePulse 3s ease-out infinite; pointer-events: none;
+    }
+    .voice-pulse:nth-child(1) { width: 180px; height: 180px; animation-delay: 0s; }
+    .voice-pulse:nth-child(2) { width: 230px; height: 230px; animation-delay: 0.8s; }
+    .voice-pulse:nth-child(3) { width: 280px; height: 280px; animation-delay: 1.6s; }
+    @keyframes voicePulse {
+      0% { opacity: 0.5; transform: translate(-50%,-50%) scale(0.85); }
+      100% { opacity: 0; transform: translate(-50%,-50%) scale(1.3); }
+    }
+
+    /* ========== CALL SIGNAL (left) ========== */
+    .call-signal {
+      position: absolute; top: 50%; left: 3%;
+      transform: translateY(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 3;
+    }
+    .call-icon-wrap {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(124,224,246,0.06); border: 1.5px solid rgba(124,224,246,0.15);
+      display: flex; align-items: center; justify-content: center; position: relative;
+    }
+    .call-icon-wrap .material-symbols-outlined {
+      font-size: 26px; color: #7ce0f6; animation: callRing 1.5s ease-in-out infinite;
+    }
+    @keyframes callRing {
+      0%, 100% { transform: rotate(0deg); }
+      15% { transform: rotate(15deg); }
+      30% { transform: rotate(-15deg); }
+      45% { transform: rotate(10deg); }
+      60% { transform: rotate(0deg); }
+    }
+    .call-pulse {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 64px; height: 64px; border-radius: 50%;
+      border: 1px solid rgba(124,224,246,0.2);
+      animation: callPulseOut 2s ease-out infinite;
+    }
+    .call-pulse:nth-child(2) { animation-delay: 0.6s; }
+    .call-pulse:nth-child(3) { animation-delay: 1.2s; }
+    @keyframes callPulseOut {
+      0% { opacity: 0.5; transform: translate(-50%,-50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%,-50%) scale(2.5); }
+    }
+    .call-label {
+      font-size: 9px; font-family: 'Inter', sans-serif;
+      text-transform: uppercase; letter-spacing: 0.15em;
+      color: rgba(124,224,246,0.5); font-weight: 600; white-space: nowrap;
+    }
+    .signal-path {
+      position: absolute; top: 50%; left: 16%; width: 30%; height: 2px;
+      background: linear-gradient(90deg, rgba(124,224,246,0.35), rgba(124,224,246,0.03)); z-index: 1;
+    }
+    .signal-path::after {
+      content: ''; position: absolute; top: -4px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #7ce0f6; box-shadow: 0 0 16px rgba(124,224,246,0.7);
+      animation: signalTravel 2s ease-in-out infinite;
+    }
+    @keyframes signalTravel {
+      0% { left: 0%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { left: 100%; opacity: 0; }
+    }
+
+    /* ========== OUTCOME CARDS (right) ========== */
+    .outcome-stack {
+      position: absolute; top: 50%; right: -2%;
+      transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 14px; z-index: 3;
+    }
+    .outcome-card {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 20px;
+      background: rgba(255,255,255,0.06); backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.12); border-radius: 16px;
+      white-space: nowrap;
+      animation: outcomeAppear 18s ease-in-out infinite;
+      opacity: 0; box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+    }
+    .outcome-card:nth-child(1) { animation-delay: 0s; }
+    .outcome-card:nth-child(2) { animation-delay: 3s; }
+    .outcome-card:nth-child(3) { animation-delay: 6s; }
+    .outcome-card:nth-child(4) { animation-delay: 9s; }
+    .outcome-card:nth-child(5) { animation-delay: 12s; }
+    .outcome-card:nth-child(6) { animation-delay: 15s; }
+    @keyframes outcomeAppear {
+      0%, 2% { opacity: 0; transform: translateY(10px); }
+      5%, 14% { opacity: 1; transform: translateY(0); }
+      17%, 100% { opacity: 0; transform: translateY(-6px); }
+    }
+    .outcome-card .material-symbols-outlined { font-size: 20px; }
+    .outcome-text { font-size: 13px; font-family: 'Inter', sans-serif; font-weight: 600; color: rgba(255,255,255,0.9); }
+    .outcome-sub { font-size: 11px; font-family: 'Inter', sans-serif; color: rgba(255,255,255,0.4); margin-left: auto; }
+
+    .signal-path-out {
+      position: absolute; top: 50%; left: 58%; width: 22%; height: 2px;
+      background: linear-gradient(90deg, rgba(170,138,255,0.03), rgba(170,138,255,0.3)); z-index: 1;
+    }
+    .signal-path-out::after {
+      content: ''; position: absolute; top: -4px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #aa8aff; box-shadow: 0 0 16px rgba(170,138,255,0.7);
+      animation: signalTravel 2.5s ease-in-out infinite 0.8s;
+    }
+
+    /* ========== ORBIT RINGS ========== */
+    .orbit-ring {
+      position: absolute; top: 50%; left: 50%; border-radius: 50%;
+      border: 1px solid rgba(124,224,246,0.1);
+      transform: translate(-50%,-50%);
+    }
+    .orbit-ring.ring-1 { width: 240px; height: 240px; animation: orbitSpin 20s linear infinite; }
+    .orbit-ring.ring-2 { width: 330px; height: 330px; animation: orbitSpin 30s linear infinite reverse; border-color: rgba(170,138,255,0.08); }
+    .orbit-ring.ring-3 { width: 420px; height: 420px; border-color: rgba(255,255,255,0.04); }
+    @keyframes orbitSpin {
+      from { transform: translate(-50%,-50%) rotate(0deg); }
+      to { transform: translate(-50%,-50%) rotate(360deg); }
+    }
+    .orbit-dot {
+      position: absolute; top: -5px; left: calc(50% - 5px);
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #7ce0f6; box-shadow: 0 0 12px rgba(124,224,246,0.8);
+    }
+    .orbit-dot.dot-purple { background: #aa8aff; box-shadow: 0 0 12px rgba(170,138,255,0.8); top: calc(50% - 5px); left: -5px; }
+    .orbit-dot.dot-green { background: #b5ffc2; box-shadow: 0 0 12px rgba(181,255,194,0.8); top: auto; bottom: -5px; left: calc(50% - 5px); }
+
+    /* ========== FLOAT BADGE ========== */
+    .float-badge { animation: floatBadge 4s ease-in-out infinite; }
+    @keyframes floatBadge {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* ========== MOBILE MENU ========== */
+    .mobile-menu { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+    .mobile-menu.open { transform: translateX(0); }
+
+    /* ========== NAV SCROLL ========== */
+    #mainNav.scrolled {
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* ========== GRID OVERLAY ========== */
+    .grid-overlay {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* ========== MARQUEE ========== */
+    .marquee-track { display: flex; width: max-content; animation: marqueeScroll 30s linear infinite; }
+    @keyframes marqueeScroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ========== COUNTER RING ========== */
+    .counter-ring { transition: stroke-dashoffset 1.5s cubic-bezier(0.16,1,0.3,1); }
+
+    /* ========== IBODYSHOP INTEGRATION VISUAL ========== */
+    .integration-connector {
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .connector-line {
+      position: absolute;
+      top: 50%; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, rgba(124,224,246,0.4), rgba(170,138,255,0.4));
+    }
+    .connector-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #7ce0f6; box-shadow: 0 0 12px rgba(124,224,246,0.8);
+      animation: connectorTravel 2.5s ease-in-out infinite;
+    }
+    @keyframes connectorTravel {
+      0% { transform: translateX(-120px); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateX(120px); opacity: 0; }
+    }
+
+    /* ========== SHIMMER BUTTON ========== */
+    .shimmer { position: relative; overflow: hidden; }
+    .shimmer::after {
+      content: ''; position: absolute; top: 0; left: -100%;
+      width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+      animation: shimmerMove 3s ease-in-out infinite 1s;
+    }
+    @keyframes shimmerMove { to { left: 160%; } }
+
+    /* ========== SMOOTH INPUT FOCUS ========== */
+    input:focus, textarea:focus, select:focus { box-shadow: 0 0 0 2px rgba(124,224,246,0.2); }
+
+    /* ========== CUSTOM SCROLLBAR ========== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0a0a; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+    /* ========== VTAB ========== */
+    .vtab-btn { position: relative; padding: 20px 24px 20px 28px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; border: 1px solid transparent; text-align: left; }
+    .vtab-btn::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%) scaleY(0); width: 3px; height: 60%; border-radius: 0 2px 2px 0; background: linear-gradient(to bottom, #7ce0f6, #aa8aff); transition: transform 0.3s cubic-bezier(0.16,1,0.3,1); }
+    .vtab-btn.active { background: rgba(124,224,246,0.05); border-color: rgba(124,224,246,0.12); }
+    .vtab-btn.active::before { transform: translateY(-50%) scaleY(1); }
+    .vtab-btn:not(.active):hover { background: rgba(255,255,255,0.03); }
+    .vtab-content-panel { opacity: 0; transform: translateY(20px); transition: all 0.4s cubic-bezier(0.16,1,0.3,1); pointer-events: none; position: absolute; }
+    .vtab-content-panel.active { opacity: 1; transform: translateY(0); pointer-events: auto; position: relative; }
+  </style>
+</head>
+
+<body class="bg-background text-on-surface font-body antialiased">
+
+<!-- ========== STARFIELD ========== -->
+<canvas id="starfield"></canvas>
+<div class="light-filter"></div>
+
+<!-- ========== NAVIGATION ========== -->
+<nav id="mainNav" class="fixed top-0 w-full z-50 transition-all duration-500">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="flex justify-between items-center h-20">
+      <a href="index.html" class="flex items-center group">
+        <img src="NxtLayr AI Logo No background.png" alt="NxtLayr AI" class="h-[4.5rem] group-hover:scale-105 transition-transform duration-300">
+      </a>
+      <div class="hidden md:flex items-center gap-1">
+        <a href="index.html" class="nav-link px-4 py-2 rounded-lg text-white/50 hover:text-white hover:bg-white/5 transition-all text-sm font-medium">Home</a>
+        <a href="#integration" class="nav-link px-4 py-2 rounded-lg text-white/50 hover:text-white hover:bg-white/5 transition-all text-sm font-medium">iBodyShop</a>
+        <a href="#features" class="nav-link px-4 py-2 rounded-lg text-white/50 hover:text-white hover:bg-white/5 transition-all text-sm font-medium">Features</a>
+        <a href="#process" class="nav-link px-4 py-2 rounded-lg text-white/50 hover:text-white hover:bg-white/5 transition-all text-sm font-medium">Process</a>
+        <a href="#contact" class="nav-link px-4 py-2 rounded-lg text-white/50 hover:text-white hover:bg-white/5 transition-all text-sm font-medium">Contact</a>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="#contact" class="hidden md:inline-flex items-center gap-2 text-white font-semibold px-6 py-2.5 rounded-full text-sm hover:scale-105 transition-all duration-300" style="background: #4da8ba; box-shadow: 0 0 15px rgba(77,168,186,0.3);">
+          Book a Call <span class="material-symbols-outlined text-base">arrow_forward</span>
+        </a>
+        <button id="menuToggle" class="md:hidden w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/5 transition-colors">
+          <span class="material-symbols-outlined text-white">menu</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mobileMenu" class="mobile-menu fixed inset-0 z-[60] bg-background/95 backdrop-blur-xl flex flex-col">
+  <div class="flex justify-between items-center px-6 h-20">
+    <span class="text-lg font-bold text-white font-headline">NxtLayr<span class="text-primary">.</span></span>
+    <button id="menuClose" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/5">
+      <span class="material-symbols-outlined text-white">close</span>
+    </button>
+  </div>
+  <div class="flex flex-col items-center justify-center flex-1 gap-8">
+    <a href="index.html" class="mobile-nav-link text-3xl font-headline font-bold text-white/60 hover:text-primary transition-colors">Home</a>
+    <a href="#integration" class="mobile-nav-link text-3xl font-headline font-bold text-white/60 hover:text-primary transition-colors">iBodyShop</a>
+    <a href="#features" class="mobile-nav-link text-3xl font-headline font-bold text-white/60 hover:text-primary transition-colors">Features</a>
+    <a href="#process" class="mobile-nav-link text-3xl font-headline font-bold text-white/60 hover:text-primary transition-colors">Process</a>
+    <a href="#contact" class="mobile-nav-link text-3xl font-headline font-bold text-white/60 hover:text-primary transition-colors">Contact</a>
+    <a href="#contact" class="mt-8 text-white font-semibold px-8 py-3 rounded-full text-lg" style="background: #4da8ba;">Book a Call</a>
+  </div>
+</div>
+
+<!-- ========== HERO ========== -->
+<section class="relative min-h-screen flex items-center overflow-hidden">
+  <div class="hero-orb w-[700px] h-[700px] bg-primary/15 top-[-250px] left-[-150px]"></div>
+  <div class="hero-orb w-[500px] h-[500px] bg-secondary/12 bottom-[-150px] right-[-80px]" style="animation-delay: -3s;"></div>
+  <div class="hero-orb w-[350px] h-[350px] bg-primary/8 top-[35%] right-[15%]" style="animation-delay: -5s;"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full pt-28 pb-16">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+
+      <!-- Left: Text -->
+      <div class="text-left">
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-3 glass rounded-full px-5 py-2.5 mb-10 reveal float-badge">
+          <span class="relative flex h-2.5 w-2.5">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-tertiary"></span>
+          </span>
+          <span class="text-xs font-label font-medium uppercase tracking-[0.2em] text-white/70">Now Live — iBodyShop Integration</span>
+        </div>
+
+        <!-- Headline -->
+        <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-headline font-bold leading-[0.95] tracking-tighter mb-8 reveal stagger-1">
+          <span class="text-white">Your body shop</span><br>
+          <span class="text-white">never misses </span><br class="hidden sm:block">
+          <span class="text-white">a </span><span class="bg-gradient-to-r from-primary via-secondary to-primary bg-[length:200%_auto] animate-[gradientShift_4s_ease-in-out_infinite] bg-clip-text text-transparent">call</span><span class="text-white"> again.</span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="text-lg md:text-xl text-white/50 max-w-lg mb-10 leading-relaxed reveal stagger-2">
+          An AI voice agent that answers every call, tells customers exactly where their car is in iBodyShop, and books new jobs — 24 hours a day, 7 days a week.
+        </p>
+
+        <!-- CTAs -->
+        <div class="flex flex-col sm:flex-row items-start gap-4 mb-12 reveal stagger-3">
+          <a href="#contact" class="shimmer group inline-flex items-center gap-3 text-white font-bold px-10 py-4 rounded-full text-lg hover:scale-105 active:scale-95 transition-all duration-300" style="background: #4da8ba; box-shadow: 0 0 25px rgba(77,168,186,0.4);">
+            <span class="material-symbols-outlined text-xl">build</span>
+            Build My Agent
+          </a>
+          <a href="#integration" class="group inline-flex items-center gap-2 glass px-8 py-4 rounded-full text-white/80 hover:text-white font-medium transition-all hover:bg-white/10">
+            See iBodyShop Integration
+            <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </a>
+        </div>
+
+        <!-- Trust -->
+        <div class="flex items-center gap-6 text-white/30 text-xs font-label tracking-wider reveal stagger-4">
+          <span class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm text-primary/70">verified</span>
+            iBodyShop Integrated
+          </span>
+          <span class="text-white/10">|</span>
+          <span class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm text-tertiary/70">schedule</span>
+            24/7 Coverage
+          </span>
+          <span class="text-white/10">|</span>
+          <span class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm text-secondary/70">rocket_launch</span>
+            Live in 7 Days
+          </span>
+        </div>
+      </div>
+
+      <!-- Right: Visual -->
+      <div class="hidden lg:flex justify-center items-center reveal-right">
+        <div class="hero-visual">
+          <div class="orbit-ring ring-3"></div>
+          <div class="orbit-ring ring-2">
+            <div class="orbit-dot dot-purple"></div>
+          </div>
+          <div class="orbit-ring ring-1">
+            <div class="orbit-dot"></div>
+            <div class="orbit-dot dot-green"></div>
+          </div>
+
+          <!-- Incoming call (left) -->
+          <div class="call-signal">
+            <div class="call-icon-wrap">
+              <div class="call-pulse"></div>
+              <div class="call-pulse"></div>
+              <div class="call-pulse"></div>
+              <span class="material-symbols-outlined">call</span>
+            </div>
+            <span class="call-label">Customer<br>Calling...</span>
+          </div>
+
+          <!-- Signal path in -->
+          <div class="signal-path"></div>
+
+          <!-- Agent centre -->
+          <div class="agent-core">
+            <div class="voice-pulse"></div>
+            <div class="voice-pulse"></div>
+            <div class="voice-pulse"></div>
+            <div class="agent-avatar" style="background: linear-gradient(135deg, #0d1f2d 0%, #091520 100%);">
+              <img src="NxtLayrAI Small Logo.png" alt="NxtLayr AI Agent" style="object-fit: contain; padding: 20px;">
+              <div class="agent-status"></div>
+            </div>
+            <span class="agent-label">AI Agent Active</span>
+          </div>
+
+          <!-- Signal path out -->
+          <div class="signal-path-out"></div>
+
+          <!-- Outcome cards (right) -->
+          <div class="outcome-stack">
+            <div class="outcome-card">
+              <span class="material-symbols-outlined text-primary">search</span>
+              <span class="outcome-text">Job #4821 Checked</span>
+              <span class="outcome-sub">iBodyShop</span>
+            </div>
+            <div class="outcome-card">
+              <span class="material-symbols-outlined text-tertiary">directions_car</span>
+              <span class="outcome-text">Car Ready — Notified</span>
+              <span class="outcome-sub">Sent</span>
+            </div>
+            <div class="outcome-card">
+              <span class="material-symbols-outlined text-secondary">event_available</span>
+              <span class="outcome-text">Quote Booked In</span>
+              <span class="outcome-sub">Confirmed</span>
+            </div>
+            <div class="outcome-card">
+              <span class="material-symbols-outlined text-primary">attach_money</span>
+              <span class="outcome-text">New Job Created</span>
+              <span class="outcome-sub">iBodyShop</span>
+            </div>
+            <div class="outcome-card">
+              <span class="material-symbols-outlined text-tertiary">schedule</span>
+              <span class="outcome-text">Parts ETA Confirmed</span>
+              <span class="outcome-sub">Answered</span>
+            </div>
+            <div class="outcome-card">
+              <span class="material-symbols-outlined text-secondary">wb_twilight</span>
+              <span class="outcome-text">After-Hours Logged</span>
+              <span class="outcome-sub">iBodyShop</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ========== PROBLEM SECTION ========== -->
+<section class="py-32 relative overflow-hidden" id="results">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+
+      <!-- Left: Copy -->
+      <div class="reveal-left">
+        <span class="text-xs font-label font-semibold uppercase tracking-[0.25em] text-primary/70 mb-4 block">The Problem</span>
+        <h2 class="text-4xl md:text-5xl lg:text-6xl font-headline font-bold mb-8 leading-[1.05] tracking-tight text-white">
+          Your workshop<br>is flat out.<br><span class="text-primary">Your phone isn't.</span>
+        </h2>
+        <p class="text-lg text-white/55 mb-6 leading-relaxed">
+          Body shops lose an average of <strong class="text-white">$3,200 per week</strong> in missed jobs because no one answered the phone. Every unanswered call is a customer who booked with a competitor — and you didn't even know they called.
+        </p>
+        <p class="text-lg text-white/55 mb-8 leading-relaxed">
+          Meanwhile, your staff answer the same question 30 times a day: <em class="text-white/80">"Is my car ready yet?"</em> — taking them away from actual work.
+        </p>
+        <div class="glass rounded-2xl p-6 gradient-border">
+          <p class="text-on-surface-variant/90 leading-relaxed italic">
+            "Our AI voice agent pulls job status directly from iBodyShop, answers every call instantly, and books new jobs while your team gets on with the work."
+          </p>
+        </div>
+      </div>
+
+      <!-- Right: Visual -->
+      <div class="flex justify-center reveal-right">
+        <div class="relative">
+          <div class="w-72 h-72 md:w-80 md:h-80 relative">
+            <svg class="w-full h-full -rotate-90" viewBox="0 0 280 280">
+              <circle cx="140" cy="140" r="120" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="22"/>
+              <circle id="statRing" class="counter-ring" cx="140" cy="140" r="120" fill="none" stroke="url(#ringGradient)" stroke-width="22" stroke-linecap="round" stroke-dasharray="754" stroke-dashoffset="754" filter="url(#ringGlow)"/>
+              <defs>
+                <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#7ce0f6"/>
+                  <stop offset="50%" stop-color="#aa8aff"/>
+                  <stop offset="100%" stop-color="#b5ffc2"/>
+                </linearGradient>
+                <filter id="ringGlow">
+                  <feGaussianBlur stdDeviation="4" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span id="statNumber" class="text-7xl font-headline font-bold text-primary text-glow-primary">0</span>
+              <span class="text-xl font-headline text-primary">%</span>
+              <p class="text-xs font-label uppercase tracking-[0.2em] text-on-surface-variant/50 mt-2">Calls Missed</p>
+            </div>
+          </div>
+          <div class="absolute -top-4 -right-4 glass rounded-2xl p-4 float-badge glow-primary" style="animation-delay: -1s;">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-tertiary text-lg">trending_up</span>
+              <span class="text-sm font-bold text-white">+$3.2K</span>
+            </div>
+            <p class="text-[0.6rem] font-label text-on-surface-variant/60 mt-1">Lost Per Week</p>
+          </div>
+          <div class="absolute -bottom-4 -left-4 glass rounded-2xl p-4 float-badge" style="animation-delay: -2s;">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-lg">schedule</span>
+              <span class="text-sm font-bold text-white">24/7</span>
+            </div>
+            <p class="text-[0.6rem] font-label text-on-surface-variant/60 mt-1">Always Answered</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Metric Strip -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-24">
+      <div class="glass rounded-2xl p-6 text-center reveal stagger-1 gradient-border">
+        <div class="text-3xl md:text-4xl font-headline font-bold text-white mb-1">40<span class="text-primary">%</span></div>
+        <p class="text-xs font-label uppercase tracking-[0.15em] text-on-surface-variant/60">Avg Calls Missed</p>
+      </div>
+      <div class="glass rounded-2xl p-6 text-center reveal stagger-2 gradient-border">
+        <div class="text-3xl md:text-4xl font-headline font-bold text-white mb-1">&lt;2<span class="text-primary">s</span></div>
+        <p class="text-xs font-label uppercase tracking-[0.15em] text-on-surface-variant/60">Answer Time</p>
+      </div>
+      <div class="glass rounded-2xl p-6 text-center reveal stagger-3 gradient-border">
+        <div class="text-3xl md:text-4xl font-headline font-bold text-white mb-1">30<span class="text-primary">+</span></div>
+        <p class="text-xs font-label uppercase tracking-[0.15em] text-on-surface-variant/60">"Is my car ready?" calls/day</p>
+      </div>
+      <div class="glass rounded-2xl p-6 text-center reveal stagger-4 gradient-border">
+        <div class="text-3xl md:text-4xl font-headline font-bold text-white mb-1">7<span class="text-primary"> days</span></div>
+        <p class="text-xs font-label uppercase tracking-[0.15em] text-on-surface-variant/60">To Go Live</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== MARQUEE ========== -->
+<div class="py-6 overflow-hidden border-y border-white/5 relative">
+  <div class="marquee-track">
+    <span class="flex items-center gap-12 px-6 text-2xl md:text-3xl font-headline font-bold whitespace-nowrap">
+      <span class="text-white">Never miss a job</span>
+      <span class="text-tertiary text-lg">&#10038;</span>
+      <span class="text-white">Live iBodyShop sync</span>
+      <span class="text-primary text-lg">&#10038;</span>
+      <span class="text-white">24/7 call handling</span>
+      <span class="text-secondary text-lg">&#10038;</span>
+      <span class="text-white">Book jobs on autopilot</span>
+      <span class="text-tertiary text-lg">&#10038;</span>
+      <span class="text-white">Job status on demand</span>
+      <span class="text-primary text-lg">&#10038;</span>
+      <span class="text-white">Human-grade voice AI</span>
+      <span class="text-secondary text-lg">&#10038;</span>
+    </span>
+    <span class="flex items-center gap-12 px-6 text-2xl md:text-3xl font-headline font-bold whitespace-nowrap" aria-hidden="true">
+      <span class="text-white">Never miss a job</span>
+      <span class="text-tertiary text-lg">&#10038;</span>
+      <span class="text-white">Live iBodyShop sync</span>
+      <span class="text-primary text-lg">&#10038;</span>
+      <span class="text-white">24/7 call handling</span>
+      <span class="text-secondary text-lg">&#10038;</span>
+      <span class="text-white">Book jobs on autopilot</span>
+      <span class="text-tertiary text-lg">&#10038;</span>
+      <span class="text-white">Job status on demand</span>
+      <span class="text-primary text-lg">&#10038;</span>
+      <span class="text-white">Human-grade voice AI</span>
+      <span class="text-secondary text-lg">&#10038;</span>
+    </span>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ========== IBODYSHOP INTEGRATION SECTION ========== -->
+<section class="py-32 relative overflow-hidden" id="integration">
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-primary/6 rounded-full blur-[150px] pointer-events-none"></div>
+  <div class="grid-overlay" style="opacity: 0.4;"></div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+
+    <!-- Header -->
+    <div class="text-center mb-20 reveal">
+      <div class="inline-flex items-center gap-3 glass rounded-full px-5 py-2.5 mb-8">
+        <div class="w-5 h-5 rounded bg-[#2563eb] flex items-center justify-center flex-shrink-0">
+          <svg viewBox="0 0 24 24" fill="white" width="12" height="12"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <span class="text-xs font-label font-medium uppercase tracking-[0.2em] text-white/70">Deep iBodyShop Integration</span>
+      </div>
+      <h2 class="text-4xl md:text-5xl lg:text-6xl font-headline font-bold tracking-tight text-white mb-6">
+        Plugged directly into<br><span class="text-primary">iBodyShop</span>
+      </h2>
+      <p class="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed">
+        Our AI agent doesn't just take messages — it reads and writes to your iBodyShop data in real time. Customers get live answers, and new jobs go straight into your system.
+      </p>
+    </div>
+
+    <!-- Integration visual + feature list -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+      <!-- Left: Integration diagram -->
+      <div class="reveal-left">
+        <div class="glass-elevated rounded-3xl p-8 gradient-border relative overflow-hidden">
+          <!-- Background glow -->
+          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/8 rounded-full blur-[60px]"></div>
+
+          <!-- Diagram -->
+          <div class="relative z-10">
+            <!-- Top: Caller -->
+            <div class="flex justify-center mb-8">
+              <div class="glass rounded-2xl px-6 py-4 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-white text-xl">person</span>
+                </div>
+                <div>
+                  <p class="text-white font-semibold text-sm">Customer calls</p>
+                  <p class="text-white/40 text-xs">"Is my Commodore ready?"</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Arrow down -->
+            <div class="flex justify-center mb-2">
+              <div class="flex flex-col items-center gap-1">
+                <div class="w-px h-6 bg-gradient-to-b from-white/20 to-primary/50"></div>
+                <span class="material-symbols-outlined text-primary text-sm">arrow_downward</span>
+              </div>
+            </div>
+
+            <!-- Centre: NxtLayr AI Agent -->
+            <div class="flex justify-center mb-2">
+              <div class="glass-elevated rounded-2xl px-8 py-5 border border-primary/20 flex items-center gap-4 glow-primary" style="min-width: 280px;">
+                <div class="w-12 h-12 rounded-xl overflow-hidden border border-primary/20 flex-shrink-0 bg-surface-container">
+                  <img src="NxtLayrAI Small Logo.png" alt="NxtLayr AI" class="w-full h-full object-contain p-1">
+                </div>
+                <div>
+                  <p class="text-white font-bold text-sm font-headline">NxtLayr AI Voice Agent</p>
+                  <p class="text-primary/70 text-xs font-label uppercase tracking-wider">Live &amp; Listening</p>
+                </div>
+                <div class="ml-auto flex items-center gap-1.5">
+                  <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Arrow down -->
+            <div class="flex justify-center mb-2">
+              <div class="flex flex-col items-center gap-1">
+                <div class="w-px h-6 bg-gradient-to-b from-primary/50 to-secondary/50"></div>
+                <span class="material-symbols-outlined text-secondary text-sm">arrow_downward</span>
+              </div>
+            </div>
+
+            <!-- Bottom: iBodyShop -->
+            <div class="flex justify-center mb-8">
+              <div class="glass rounded-2xl px-6 py-4 border border-secondary/15 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-[#2563eb]/20 flex items-center justify-center flex-shrink-0">
+                  <svg viewBox="0 0 24 24" fill="#60a5fa" width="20" height="20"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                </div>
+                <div>
+                  <p class="text-white font-semibold text-sm">iBodyShop</p>
+                  <p class="text-white/40 text-xs">Job #4821 — In Paint — ETA Fri 3pm</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Arrow back up (response) -->
+            <div class="flex justify-center mb-2">
+              <div class="flex flex-col items-center gap-1">
+                <span class="material-symbols-outlined text-tertiary text-sm">arrow_upward</span>
+                <div class="w-px h-6 bg-gradient-to-t from-white/20 to-tertiary/50"></div>
+              </div>
+            </div>
+
+            <!-- Response to customer -->
+            <div class="flex justify-center">
+              <div class="glass rounded-2xl px-6 py-4 border border-tertiary/15 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-tertiary/10 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-tertiary text-xl">record_voice_over</span>
+                </div>
+                <div>
+                  <p class="text-white font-semibold text-sm">Customer hears</p>
+                  <p class="text-white/40 text-xs">"Your car is in paint, ready Friday at 3pm."</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Feature list -->
+      <div class="space-y-5 reveal-right">
+        <div class="glass rounded-2xl p-6 hover:bg-white/[0.04] transition-all group gradient-border">
+          <div class="flex items-start gap-4">
+            <div class="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors mt-0.5">
+              <span class="material-symbols-outlined text-primary">search</span>
+            </div>
+            <div>
+              <h4 class="text-white font-bold mb-1.5">Live job status lookup</h4>
+              <p class="text-white/50 text-sm leading-relaxed">Customer calls asking where their car is — the agent looks up the job in iBodyShop by name or phone number and reads out the current status, stage, and estimated completion time.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass rounded-2xl p-6 hover:bg-white/[0.04] transition-all group gradient-border">
+          <div class="flex items-start gap-4">
+            <div class="w-11 h-11 rounded-xl bg-secondary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-secondary/20 transition-colors mt-0.5">
+              <span class="material-symbols-outlined text-secondary">add_circle</span>
+            </div>
+            <div>
+              <h4 class="text-white font-bold mb-1.5">New job creation</h4>
+              <p class="text-white/50 text-sm leading-relaxed">New customers calling for a quote? The agent captures their name, vehicle, and damage description, then creates a draft job card directly in iBodyShop so your assessors start with complete info.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass rounded-2xl p-6 hover:bg-white/[0.04] transition-all group gradient-border">
+          <div class="flex items-start gap-4">
+            <div class="w-11 h-11 rounded-xl bg-tertiary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-tertiary/20 transition-colors mt-0.5">
+              <span class="material-symbols-outlined text-tertiary">wb_twilight</span>
+            </div>
+            <div>
+              <h4 class="text-white font-bold mb-1.5">After-hours call handling</h4>
+              <p class="text-white/50 text-sm leading-relaxed">Every call after 5pm or on weekends is handled professionally. Job enquiries are logged to iBodyShop with a callback flag so your team opens each day ready to follow up.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass rounded-2xl p-6 hover:bg-white/[0.04] transition-all group gradient-border">
+          <div class="flex items-start gap-4">
+            <div class="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors mt-0.5">
+              <span class="material-symbols-outlined text-primary">call_split</span>
+            </div>
+            <div>
+              <h4 class="text-white font-bold mb-1.5">Smart call routing</h4>
+              <p class="text-white/50 text-sm leading-relaxed">Parts suppliers, insurance assessors, and fleet managers are identified and routed to the right person — or held with a professional message if the team is busy.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ========== FEATURES / SERVICES ========== -->
+<section class="py-32 relative overflow-hidden" id="features">
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-surface-container-low/50 to-transparent"></div>
+  <div class="grid-overlay" style="opacity: 0.5;"></div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-6">
+      <div class="reveal">
+        <span class="text-xs font-label font-semibold uppercase tracking-[0.25em] text-primary/70 mb-4 block">What We Build For You</span>
+        <h2 class="text-4xl md:text-5xl lg:text-6xl font-headline font-bold tracking-tight text-white">Four agents.<br>One shop.</h2>
+      </div>
+      <div class="glass rounded-full px-5 py-2.5 text-xs font-label uppercase tracking-[0.2em] text-on-surface-variant/70 reveal">
+        Purpose-built for body shops
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+      <!-- Job Status Agent -->
+      <div class="group glass-elevated rounded-3xl p-7 hover:bg-white/[0.04] hover:-translate-y-2 hover:shadow-[0_0_50px_rgba(124,224,246,0.1),0_20px_60px_rgba(0,0,0,0.3)] transition-all duration-500 cursor-pointer reveal stagger-1 gradient-border relative">
+        <div class="absolute -top-3 right-5 bg-gradient-to-r from-primary to-secondary text-black text-[0.6rem] font-label font-bold uppercase tracking-wider px-3 py-1.5 rounded-full shadow-[0_0_20px_rgba(124,224,246,0.3)]">
+          Most Used
+        </div>
+        <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-7 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-500">
+          <span class="material-symbols-outlined text-primary text-2xl">directions_car</span>
+        </div>
+        <h3 class="text-xl font-headline font-bold mb-3 text-white group-hover:text-primary transition-colors">Job Status Agent</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+          Handles the #1 call in every body shop. Looks up the job in iBodyShop and tells customers exactly where their car is — every time, instantly.
+        </p>
+        <ul class="space-y-2.5">
+          <li class="flex items-center gap-2.5 text-sm text-on-surface-variant/80">
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>Live iBodyShop lookup
+          </li>
+          <li class="flex items-center gap-2.5 text-sm text-on-surface-variant/80">
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>Stage &amp; ETA readout
+          </li>
+          <li class="flex items-center gap-2.5 text-sm text-on-surface-variant/80">
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>24/7 self-service
+          </li>
+        </ul>
+      </div>
+
+      <!-- Quote Booking Agent -->
+      <div class="group glass-elevated rounded-3xl p-7 hover:bg-white/[0.04] hover:-translate-y-2 hover:shadow-[0_0_50px_rgba(170,138,255,0.12),0_20px_60px_rgba(0,0,0,0.3)] transition-all duration-500 cursor-pointer reveal stagger-2 gradient-border">
+        <div class="w-12 h-12 rounded-2xl bg-secondary/10 flex items-center justify-center mb-7 group-hover:bg-secondary/20 group-hover:scale-110 transition-all duration-500">
+          <span class="material-symbols-outlined text-secondary text-2xl">request_quote</span>
+        </div>
+        <h3 class="text-xl font-headline font-bold mb-3 text-white group-hover:text-secondary transition-colors">Quote Booking Agent</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+          Captures new customer enquiries properly. Gets the vehicle, damage details, and contact info — then creates the job card in iBodyShop before your assessor calls back.
+        </p>
+        <ul class="space-y-2.5">
+          <li class="flex items-center gap-2.5 text-sm text-on-surface-variant/80">
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>Vehicle &amp; damage capture
+          </li>
+          <li class="flex items-center gap-2.5 text-sm text-on-surface-variant/80">
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>Auto job creation
+          </li>
+          <li class="flex items-center gap-2.5 text-sm text-on-surface-variant/80">
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>Assessment scheduling
+          </li>
+        </ul>
+      </div>
+
+      <!-- After-Hours Agent -->
+      <div class="group glass-elevated rounded-3xl p-7 hover:bg-white/[0.04] hover:-translate-y-2 hover:shadow-[0_0_50px_rgba(181,255,194,0.1),0_20px_60px_rgba(0,0,0,0.3)] transition-all duration-500 cursor-pointer reveal stagger-3 gradient-border">
+        <div class="w-12 h-12 rounded-2xl bg-tertiary/10 flex items-center justify-center mb-7 group-hover:bg-tertiary/20 group-hover:scale-110 transition-all duration-500">
+          <span class="material-symbols-outlined text-tertiary text-2xl">wb_twilight</span>
+        </div>
+        <h3 class="text-xl font-headline font-bold mb-3 text-white group-hover:text-tertiary transition-colors">After-Hours Agent</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+          Evenings, weekends, public holidays — every call is handled professionally. Urgent enquiries are flagged. Job requests are logged to iBodyShop for morning follow-up.
+        </p>
+        <ul class="space-y-2.5">
+          <li class="flex items-center gap-2.5 text-sm text-on-surface-variant/80">
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>Professional after-hours handling
+          </li>
+          <li class="flex items-center gap-2.5 text-sm text-on-surface-variant/80">
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>iBodyShop callback logging
+          </li>
+          <li class="flex items-center gap-2.5 text-sm text-on-surface-variant/80">
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>Urgent escalation
+          </li>
+        </ul>
+      </div>
+
+      <!-- Proactive Update Agent -->
+      <div class="group glass-elevated rounded-3xl p-7 hover:bg-white/[0.04] hover:-translate-y-2 hover:shadow-[0_0_50px_rgba(124,224,246,0.1),0_20px_60px_rgba(0,0,0,0.3)] transition-all duration-500 cursor-pointer reveal stagger-4 gradient-border">
+        <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-7 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-500">
+          <span class="material-symbols-outlined text-primary text-2xl">notifications_active</span>
+        </div>
+        <h3 class="text-xl font-headline font-bold mb-3 text-white group-hover:text-primary transition-colors">Proactive Updates</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+          Stop customers calling to check in — the agent calls them first. When a job status changes in iBodyShop, customers are automatically notified by phone or SMS.
+        </p>
+        <ul class="space-y-2.5">
+          <li class="flex items-center gap-2.5 text-sm text-on-surface-variant/80">
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>iBodyShop trigger-based calls
+          </li>
+          <li class="flex items-center gap-2.5 text-sm text-on-surface-variant/80">
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>"Car is ready" outbound
+          </li>
+          <li class="flex items-center gap-2.5 text-sm text-on-surface-variant/80">
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>Reduces inbound volume
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ========== PROCESS SECTION ========== -->
+<section class="py-32 relative" id="process">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
+      <!-- Left: Tabs -->
+      <div class="lg:col-span-5 flex flex-col justify-center order-2 lg:order-1 pt-4 reveal-left" style="min-height: 500px;">
+        <div class="mb-12">
+          <h2 class="tracking-tighter text-3xl font-medium md:text-4xl lg:text-5xl text-white font-headline font-bold">
+            Live in Five Steps
+          </h2>
+          <span class="text-[10px] font-label font-medium text-on-surface-variant/50 uppercase tracking-[0.3em] block ml-0.5 mt-1">
+            (HOW IT WORKS)
+          </span>
+        </div>
+        <div id="vtabList" class="flex flex-col pl-5"></div>
+      </div>
+
+      <!-- Right: Content -->
+      <div class="lg:col-span-7 flex flex-col justify-end h-full order-1 lg:order-2 reveal-right">
+        <div id="vtabContent" class="vtab-content-area"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ========== TESTIMONIAL ========== -->
+<section class="py-24 relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-surface-container-low/30 to-transparent"></div>
+  <div class="max-w-5xl mx-auto px-6 lg:px-8 relative z-10">
+    <div class="glass-elevated rounded-3xl p-10 md:p-16 text-center gradient-border reveal-scale">
+      <div class="flex items-center justify-center gap-1 mb-6">
+        <span class="material-symbols-outlined text-yellow-400 text-3xl" style="font-variation-settings: 'FILL' 1;">star</span>
+        <span class="material-symbols-outlined text-yellow-400 text-3xl" style="font-variation-settings: 'FILL' 1;">star</span>
+        <span class="material-symbols-outlined text-yellow-400 text-3xl" style="font-variation-settings: 'FILL' 1;">star</span>
+        <span class="material-symbols-outlined text-yellow-400 text-3xl" style="font-variation-settings: 'FILL' 1;">star</span>
+        <span class="material-symbols-outlined text-yellow-400 text-3xl" style="font-variation-settings: 'FILL' 1;">star</span>
+      </div>
+      <blockquote class="text-2xl md:text-3xl font-headline font-medium leading-snug text-white/90 mb-10">
+        "In an evolving area Chris is really on top of what things are available and how these can add real value to your business. Highly recommend reaching out to him for further advice."
+      </blockquote>
+      <div class="flex items-center justify-center gap-4">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-black font-bold font-headline">
+          B
+        </div>
+        <div class="text-left">
+          <p class="text-white font-semibold text-sm">Brendan</p>
+          <p class="text-on-surface-variant/60 text-xs font-label uppercase tracking-wider">Director, Scott&amp;Co Accountants</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ========== CONTACT ========== -->
+<section class="py-32 relative overflow-hidden" id="contact">
+  <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[150px] pointer-events-none"></div>
+  <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+
+      <!-- Left: Info -->
+      <div class="reveal-left">
+        <span class="text-xs font-label font-semibold uppercase tracking-[0.25em] text-primary/70 mb-4 block">Get Started</span>
+        <h2 class="text-4xl md:text-5xl lg:text-6xl font-headline font-bold tracking-tight text-white mb-6">
+          Let's build your<br><span class="text-primary">Body Shop Agent</span>
+        </h2>
+        <p class="text-lg text-white/55 mb-12 leading-relaxed">
+          Book a free 20-minute call. We'll show you exactly how the iBodyShop integration works and what your agent will sound like.
+        </p>
+
+        <div class="space-y-4 mb-12">
+          <div class="glass rounded-2xl p-5 flex items-center gap-4 hover:bg-white/[0.04] transition-all group">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <span class="material-symbols-outlined text-primary">build</span>
+            </div>
+            <div>
+              <p class="text-white font-semibold text-sm">iBodyShop integration included</p>
+              <p class="text-on-surface-variant/60 text-xs">No extra cost, fully configured for you</p>
+            </div>
+          </div>
+          <div class="glass rounded-2xl p-5 flex items-center gap-4 hover:bg-white/[0.04] transition-all group">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <span class="material-symbols-outlined text-primary">rocket_launch</span>
+            </div>
+            <div>
+              <p class="text-white font-semibold text-sm">Live in 7 days</p>
+              <p class="text-on-surface-variant/60 text-xs">We handle the full setup end-to-end</p>
+            </div>
+          </div>
+          <div class="glass rounded-2xl p-5 flex items-center gap-4 hover:bg-white/[0.04] transition-all group">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <span class="material-symbols-outlined text-primary">mail</span>
+            </div>
+            <div>
+              <p class="text-white font-semibold text-sm">hello@nxtlayrai.com</p>
+              <p class="text-on-surface-variant/60 text-xs">Response within 24 hours</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Form -->
+      <div class="reveal-right">
+        <div class="glass-elevated rounded-3xl p-8 md:p-10 gradient-border">
+          <h3 class="text-2xl font-headline font-bold mb-2 text-white">Book a Free Call</h3>
+          <p class="text-on-surface-variant/70 text-sm mb-8">Tell us about your shop and we'll be in touch within 24 hours.</p>
+
+          <form id="contactForm" class="space-y-5" onsubmit="handleFormSubmit(event)">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-[0.65rem] font-label font-semibold uppercase tracking-[0.2em] text-on-surface-variant/60 mb-2">Your Name</label>
+                <input type="text" placeholder="John Smith" class="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/25 focus:ring-0 focus:outline-none focus:border-primary/30 focus:bg-white/[0.08] transition-all"/>
+              </div>
+              <div>
+                <label class="block text-[0.65rem] font-label font-semibold uppercase tracking-[0.2em] text-on-surface-variant/60 mb-2">Email</label>
+                <input type="email" placeholder="john@mybodyshop.com.au" class="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/25 focus:ring-0 focus:outline-none focus:border-primary/30 focus:bg-white/[0.08] transition-all"/>
+              </div>
+            </div>
+            <div>
+              <label class="block text-[0.65rem] font-label font-semibold uppercase tracking-[0.2em] text-on-surface-variant/60 mb-2">Shop Name</label>
+              <input type="text" placeholder="Smith's Panel & Paint" class="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/25 focus:ring-0 focus:outline-none focus:border-primary/30 focus:bg-white/[0.08] transition-all"/>
+            </div>
+            <div>
+              <label class="block text-[0.65rem] font-label font-semibold uppercase tracking-[0.2em] text-on-surface-variant/60 mb-2">Approx. Calls Per Day</label>
+              <select class="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white focus:ring-0 focus:outline-none focus:border-primary/30 focus:bg-white/[0.08] transition-all appearance-none cursor-pointer" style="background-color: rgba(255,255,255,0.06);">
+                <option value="" class="bg-surface-container text-white">Select call volume</option>
+                <option value="1-10" class="bg-surface-container text-white">1–10 calls/day</option>
+                <option value="11-30" class="bg-surface-container text-white">11–30 calls/day</option>
+                <option value="31-60" class="bg-surface-container text-white">31–60 calls/day</option>
+                <option value="60+" class="bg-surface-container text-white">60+ calls/day</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[0.65rem] font-label font-semibold uppercase tracking-[0.2em] text-on-surface-variant/60 mb-2">Anything else?</label>
+              <textarea placeholder="Tell us about your biggest phone challenges..." rows="3" class="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/25 focus:ring-0 focus:outline-none focus:border-primary/30 focus:bg-white/[0.08] transition-all resize-none"></textarea>
+            </div>
+            <button id="submitBtn" type="submit" class="w-full bg-gradient-to-r from-primary to-primary-fixed-dim text-black font-bold py-4 rounded-xl hover:shadow-[0_0_30px_rgba(124,224,246,0.3)] transition-all duration-300 text-sm font-label uppercase tracking-wider shimmer">
+              Book My Free Call
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="border-t border-white/5 relative z-10">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+    <div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-12">
+      <div class="max-w-sm">
+        <a href="index.html" class="flex items-center mb-4">
+          <img src="NxtLayr AI Logo No background.png" alt="NxtLayr AI" class="h-16">
+        </a>
+        <p class="text-on-surface-variant/50 text-sm leading-relaxed">
+          Building practical &amp; effective AI voice agents purpose-built for body shops, with deep iBodyShop integration.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-12 md:gap-16">
+        <div>
+          <h5 class="text-[0.65rem] font-label font-bold uppercase tracking-[0.2em] text-on-surface-variant/40 mb-4">This Page</h5>
+          <div class="space-y-3">
+            <a href="#integration" class="block text-sm text-on-surface-variant/60 hover:text-white transition-colors">iBodyShop Integration</a>
+            <a href="#features" class="block text-sm text-on-surface-variant/60 hover:text-white transition-colors">Features</a>
+            <a href="#process" class="block text-sm text-on-surface-variant/60 hover:text-white transition-colors">Process</a>
+            <a href="#contact" class="block text-sm text-on-surface-variant/60 hover:text-white transition-colors">Book a Call</a>
+          </div>
+        </div>
+        <div>
+          <h5 class="text-[0.65rem] font-label font-bold uppercase tracking-[0.2em] text-on-surface-variant/40 mb-4">Company</h5>
+          <div class="space-y-3">
+            <a href="index.html" class="block text-sm text-on-surface-variant/60 hover:text-white transition-colors">Home</a>
+            <a href="#" class="block text-sm text-on-surface-variant/60 hover:text-white transition-colors">Privacy Policy</a>
+            <a href="#" class="block text-sm text-on-surface-variant/60 hover:text-white transition-colors">Terms of Service</a>
+          </div>
+        </div>
+        <div>
+          <h5 class="text-[0.65rem] font-label font-bold uppercase tracking-[0.2em] text-on-surface-variant/40 mb-4">Connect</h5>
+          <div class="space-y-3">
+            <a href="#" class="block text-sm text-on-surface-variant/60 hover:text-white transition-colors">LinkedIn</a>
+            <a href="#" class="block text-sm text-on-surface-variant/60 hover:text-white transition-colors">YouTube</a>
+            <a href="#" class="block text-sm text-on-surface-variant/60 hover:text-white transition-colors">Instagram</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+      <span class="text-[0.65rem] font-label text-on-surface-variant/30 tracking-wider">&copy; 2026 NxtLayr AI. All rights reserved.</span>
+      <span class="text-[0.65rem] font-label text-on-surface-variant/20 tracking-wider">Sydney, Australia</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ========== JAVASCRIPT ========== -->
+<script>
+// ===== STARFIELD =====
+(function() {
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  const STAR_COUNT = 350;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function createStars() {
+    stars = [];
+    for (let i = 0; i < STAR_COUNT; i++) {
+      const isBright = Math.random() < 0.15;
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        baseX: 0, baseY: 0,
+        size: isBright ? Math.random() * 2.5 + 1.2 : Math.random() * 1.8 + 0.4,
+        opacity: isBright ? Math.random() * 0.4 + 0.5 : Math.random() * 0.5 + 0.15,
+        twinkleSpeed: Math.random() * 0.8 + 0.2,
+        phase: Math.random() * Math.PI * 2,
+        driftX: (Math.random() - 0.5) * 0.15,
+        driftY: (Math.random() - 0.5) * 0.1,
+        driftPhase: Math.random() * Math.PI * 2,
+        driftRadius: Math.random() * 20 + 5,
+        isBright: isBright,
+        color: Math.random() < 0.35 ? [255, 150, 60] : Math.random() < 0.5 ? [255, 120, 180] : [100, 180, 255]
+      });
+    }
+    stars.forEach(s => { s.baseX = s.x; s.baseY = s.y; });
+  }
+
+  function draw(time) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const t = time * 0.001;
+    stars.forEach(s => {
+      s.x = s.baseX + Math.sin(t * 0.3 + s.driftPhase) * s.driftRadius * s.driftX;
+      s.y = s.baseY + Math.cos(t * 0.2 + s.driftPhase) * s.driftRadius * s.driftY;
+      if (s.x < -5) s.baseX += canvas.width + 10;
+      if (s.x > canvas.width + 5) s.baseX -= canvas.width + 10;
+      if (s.y < -5) s.baseY += canvas.height + 10;
+      if (s.y > canvas.height + 5) s.baseY -= canvas.height + 10;
+      const twinkle = Math.sin(t * s.twinkleSpeed + s.phase) * 0.4 + 0.6;
+      const alpha = s.opacity * twinkle;
+      const [r, g, b] = s.color;
+      if (s.isBright) {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.size * 3, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${r},${g},${b},${alpha * 0.08})`;
+        ctx.fill();
+      }
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  resize(); createStars(); requestAnimationFrame(draw);
+  window.addEventListener('resize', () => { resize(); createStars(); });
+})();
+
+// ===== NAV SCROLL =====
+(function() {
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 50); });
+})();
+
+// ===== MOBILE MENU =====
+(function() {
+  const menu = document.getElementById('mobileMenu');
+  const toggle = document.getElementById('menuToggle');
+  const close = document.getElementById('menuClose');
+  const links = menu.querySelectorAll('.mobile-nav-link');
+  toggle.addEventListener('click', () => menu.classList.add('open'));
+  close.addEventListener('click', () => menu.classList.remove('open'));
+  links.forEach(l => l.addEventListener('click', () => menu.classList.remove('open')));
+})();
+
+// ===== SCROLL REVEAL =====
+(function() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => observer.observe(el));
+})();
+
+// ===== STAT COUNTER =====
+(function() {
+  const statSection = document.getElementById('results');
+  const statNumber = document.getElementById('statNumber');
+  const statRing = document.getElementById('statRing');
+  let animated = false;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !animated) {
+        animated = true;
+        let current = 0;
+        const target = 40;
+        const duration = 1500;
+        const start = performance.now();
+        function animateCount(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          current = Math.round(eased * target);
+          statNumber.textContent = current;
+          if (progress < 1) requestAnimationFrame(animateCount);
+        }
+        requestAnimationFrame(animateCount);
+        statRing.style.strokeDashoffset = 754 - (754 * 0.4);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  if (statSection) observer.observe(statSection);
+})();
+
+// ===== VERTICAL TABS (PROCESS) =====
+(function() {
+  const STEPS = [
+    {
+      id: '01', title: 'Discovery Call',
+      description: 'We spend 20 minutes learning your shop — how many calls you get, what customers ask most, how iBodyShop is set up, and where the biggest pain points are.',
+      icon: 'chat', color: 'from-primary/20 to-primary/5', iconColor: 'text-primary'
+    },
+    {
+      id: '02', title: 'iBodyShop Setup',
+      description: 'We connect directly to your iBodyShop account, configure job lookup by customer phone number, and map your workshop stages to plain-English status descriptions.',
+      icon: 'settings', color: 'from-secondary/20 to-secondary/5', iconColor: 'text-secondary'
+    },
+    {
+      id: '03', title: 'Agent Scripting',
+      description: 'Your AI agent is given your shop\'s name, your tone, and answers to the questions your customers ask every day. We tune the voice and personality until it sounds like your team.',
+      icon: 'record_voice_over', color: 'from-primary/20 to-primary/5', iconColor: 'text-primary'
+    },
+    {
+      id: '04', title: 'Test & Refine',
+      description: 'You call your own number and test every scenario — job status lookups, new quote enquiries, after-hours calls. We refine until you\'re satisfied it handles everything correctly.',
+      icon: 'tune', color: 'from-tertiary/20 to-tertiary/5', iconColor: 'text-tertiary'
+    },
+    {
+      id: '05', title: 'Go Live',
+      description: 'We forward your existing business number to the agent (takes 2 minutes), and it starts answering calls immediately. You get a dashboard to review every call and continue optimising.',
+      icon: 'rocket_launch', color: 'from-primary/20 to-secondary/5', iconColor: 'text-primary'
+    }
+  ];
+
+  const tabList = document.getElementById('vtabList');
+  const tabContent = document.getElementById('vtabContent');
+  if (!tabList || !tabContent) return;
+
+  let activeIndex = 0;
+
+  function renderTabs() {
+    tabList.innerHTML = STEPS.map((step, i) => `
+      <button class="vtab-btn ${i === activeIndex ? 'active' : ''}" data-index="${i}">
+        <div class="flex items-center gap-4">
+          <span class="text-xs font-label font-bold text-on-surface-variant/30 w-6">${step.id}</span>
+          <span class="font-headline font-bold text-base ${i === activeIndex ? 'text-white' : 'text-on-surface-variant/60'} transition-colors">${step.title}</span>
+        </div>
+      </button>
+    `).join('');
+
+    tabList.querySelectorAll('.vtab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeIndex = parseInt(btn.dataset.index);
+        renderTabs();
+        renderContent();
+      });
+    });
+  }
+
+  function renderContent() {
+    const step = STEPS[activeIndex];
+    tabContent.innerHTML = `
+      <div class="vtab-content-panel active glass-elevated rounded-3xl p-10 gradient-border">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center mb-8">
+          <span class="material-symbols-outlined ${step.iconColor} text-3xl">${step.icon}</span>
+        </div>
+        <div class="text-xs font-label font-bold uppercase tracking-[0.25em] text-on-surface-variant/40 mb-3">Step ${step.id}</div>
+        <h3 class="text-3xl font-headline font-bold text-white mb-5">${step.title}</h3>
+        <p class="text-on-surface-variant/80 leading-relaxed text-base">${step.description}</p>
+      </div>
+    `;
+  }
+
+  renderTabs();
+  renderContent();
+})();
+
+// ===== FORM SUBMIT =====
+function handleFormSubmit(event) {
+  event.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Sent! We\'ll be in touch shortly.';
+  btn.style.background = 'linear-gradient(to right, #b5ffc2, #24f07e)';
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.textContent = 'Book My Free Call';
+    btn.style.background = '';
+    btn.disabled = false;
+  }, 5000);
+}
+</script>
+
+</body>
+</html>
