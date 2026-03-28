@@ -2,10 +2,26 @@
 <html class="dark" lang="en">
 <head>
   <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
   <title>NxtLayr AI | AI Voice Agents for Modern Business</title>
   <link rel="icon" type="image/png" href="NxtLayrAI Small Logo.png">
   <meta name="description" content="NxtLayr AI builds intelligent voice agents that handle real calls 24/7. Never miss a lead again.">
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="canonical" href="https://nxtlayrwebsite-2026-gopj.vercel.app/">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nxtlayrwebsite-2026-gopj.vercel.app/">
+  <meta property="og:title" content="NxtLayr AI | AI Voice Agents for Modern Business">
+  <meta property="og:description" content="NxtLayr AI builds intelligent voice agents that handle real calls 24/7. Never miss a lead again.">
+  <meta property="og:image" content="https://nxtlayrwebsite-2026-gopj.vercel.app/NxtLayrAI%20Full%20Logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="NxtLayr AI | AI Voice Agents for Modern Business">
+  <meta name="twitter:description" content="NxtLayr AI builds intelligent voice agents that handle real calls 24/7. Never miss a lead again.">
+  <meta name="twitter:image" content="https://nxtlayrwebsite-2026-gopj.vercel.app/NxtLayrAI%20Full%20Logo.png">
+  <!-- Resource hints -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -854,6 +870,10 @@
     input:focus, textarea:focus, select:focus {
       box-shadow: 0 0 0 2px rgba(124, 224, 246, 0.2);
     }
+    /* ========== IOS ZOOM PREVENTION ========== */
+    @media (max-width: 767px) {
+      input, textarea, select { font-size: 16px !important; }
+    }
 
     /* ========== CUSTOM SCROLLBAR ========== */
     ::-webkit-scrollbar { width: 6px; }
@@ -895,7 +915,7 @@
           Book a Call
           <span class="material-symbols-outlined text-base">arrow_forward</span>
         </a>
-        <button id="menuToggle" class="md:hidden w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/5 transition-colors">
+        <button id="menuToggle" aria-label="Open menu" class="md:hidden w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/5 transition-colors">
           <span class="material-symbols-outlined text-white">menu</span>
         </button>
       </div>
@@ -907,7 +927,7 @@
 <div id="mobileMenu" class="mobile-menu fixed inset-0 z-[60] bg-background/95 backdrop-blur-xl flex flex-col">
   <div class="flex justify-between items-center px-6 h-20">
     <span class="text-lg font-bold text-white font-headline">NxtLayr<span class="text-primary">.</span></span>
-    <button id="menuClose" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/5">
+    <button id="menuClose" aria-label="Close menu" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/5">
       <span class="material-symbols-outlined text-white">close</span>
     </button>
   </div>
@@ -1536,16 +1556,16 @@
 
         <!-- Social Links -->
         <div class="flex gap-3">
-          <a href="#" class="w-11 h-11 glass rounded-xl flex items-center justify-center hover:bg-primary/10 hover:border-primary/30 transition-all group">
+          <a href="#" aria-label="LinkedIn" class="w-11 h-11 glass rounded-xl flex items-center justify-center hover:bg-primary/10 hover:border-primary/30 transition-all group">
             <svg class="w-4 h-4 fill-current text-on-surface-variant/60 group-hover:text-primary transition-colors" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
           </a>
-          <a href="#" class="w-11 h-11 glass rounded-xl flex items-center justify-center hover:bg-primary/10 hover:border-primary/30 transition-all group">
+          <a href="#" aria-label="YouTube" class="w-11 h-11 glass rounded-xl flex items-center justify-center hover:bg-primary/10 hover:border-primary/30 transition-all group">
             <svg class="w-4 h-4 fill-current text-on-surface-variant/60 group-hover:text-primary transition-colors" viewBox="0 0 24 24"><path d="M23.498 6.186c-.273-1.011-1.074-1.812-2.085-2.085-1.841-.497-9.413-.497-9.413-.497s-7.572 0-9.413.497c-1.011.273-1.812 1.074-2.085 2.085-.497 1.841-.497 5.814-.497 5.814s0 3.973.497 5.814c.273 1.011 1.074 1.812 2.085 2.085 1.841.497 9.413.497 9.413.497s7.572 0 9.413-.497c1.011-.273 1.812-1.074 2.085-2.085.497-1.841.497-5.814.497-5.814s0-3.973-.497-5.814zM9.596 15.536v-7.072l6.238 3.536-6.238 3.536z"/></svg>
           </a>
-          <a href="#" class="w-11 h-11 glass rounded-xl flex items-center justify-center hover:bg-primary/10 hover:border-primary/30 transition-all group">
+          <a href="#" aria-label="Instagram" class="w-11 h-11 glass rounded-xl flex items-center justify-center hover:bg-primary/10 hover:border-primary/30 transition-all group">
             <svg class="w-4 h-4 fill-current text-on-surface-variant/60 group-hover:text-primary transition-colors" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.245 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.332 2.633-1.308 3.608-.975.975-2.242 1.245-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.332-3.608-1.308-.975-.975-1.245-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.332-2.633 1.308-3.608.975-.975 2.242-1.245 3.608-1.308 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
           </a>
-          <a href="#" class="w-11 h-11 glass rounded-xl flex items-center justify-center hover:bg-primary/10 hover:border-primary/30 transition-all group">
+          <a href="#" aria-label="X / Twitter" class="w-11 h-11 glass rounded-xl flex items-center justify-center hover:bg-primary/10 hover:border-primary/30 transition-all group">
             <svg class="w-4 h-4 fill-current text-on-surface-variant/60 group-hover:text-primary transition-colors" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
           </a>
         </div>
@@ -1561,16 +1581,16 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
                 <label class="block text-[0.65rem] font-label font-semibold uppercase tracking-[0.2em] text-on-surface-variant/60 mb-2">Name</label>
-                <input type="text" placeholder="John Doe" class="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/25 focus:ring-0 focus:outline-none focus:border-primary/30 focus:bg-white/[0.08] transition-all"/>
+                <input type="text" name="name" autocomplete="name" placeholder="John Doe" class="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/25 focus:ring-0 focus:outline-none focus:border-primary/30 focus:bg-white/[0.08] transition-all"/>
               </div>
               <div>
                 <label class="block text-[0.65rem] font-label font-semibold uppercase tracking-[0.2em] text-on-surface-variant/60 mb-2">Email</label>
-                <input type="email" placeholder="john@company.com" class="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/25 focus:ring-0 focus:outline-none focus:border-primary/30 focus:bg-white/[0.08] transition-all"/>
+                <input type="email" name="email" autocomplete="email" inputmode="email" placeholder="john@company.com" class="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/25 focus:ring-0 focus:outline-none focus:border-primary/30 focus:bg-white/[0.08] transition-all"/>
               </div>
             </div>
             <div>
               <label class="block text-[0.65rem] font-label font-semibold uppercase tracking-[0.2em] text-on-surface-variant/60 mb-2">Business Type</label>
-              <select class="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white focus:ring-0 focus:outline-none focus:border-primary/30 focus:bg-white/[0.08] transition-all appearance-none cursor-pointer">
+              <select name="business_type" autocomplete="off" class="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white focus:ring-0 focus:outline-none focus:border-primary/30 focus:bg-white/[0.08] transition-all appearance-none cursor-pointer">
                 <option>Select your business type</option>
                 <option>Healthcare / Medical</option>
                 <option>Real Estate</option>
@@ -1583,7 +1603,7 @@
             </div>
             <div>
               <label class="block text-[0.65rem] font-label font-semibold uppercase tracking-[0.2em] text-on-surface-variant/60 mb-2">Message</label>
-              <textarea placeholder="Tell us about your business and how we can help..." rows="4" class="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/25 focus:ring-0 focus:outline-none focus:border-primary/30 focus:bg-white/[0.08] transition-all resize-none"></textarea>
+              <textarea name="message" autocomplete="off" placeholder="Tell us about your business and how we can help..." rows="4" class="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/25 focus:ring-0 focus:outline-none focus:border-primary/30 focus:bg-white/[0.08] transition-all resize-none"></textarea>
             </div>
             <button type="submit" class="w-full bg-gradient-to-r from-primary to-primary-fixed-dim text-black font-bold py-4 rounded-xl hover:shadow-[0_0_30px_rgba(124,224,246,0.3)] transition-all duration-300 text-sm font-label uppercase tracking-wider shimmer">
               Send Message
