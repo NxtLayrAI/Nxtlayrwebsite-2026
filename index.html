@@ -312,8 +312,10 @@
     .agent-avatar img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       display: block;
+      border-radius: 50%;
+      padding: 20px;
     }
     /* Gradient overlay on avatar for brand tint */
     .agent-avatar::after {
@@ -1015,12 +1017,8 @@
             <div class="voice-pulse"></div>
             <div class="voice-pulse"></div>
             <div class="voice-pulse"></div>
-            <div class="agent-avatar">
-              <img src="agent-avatar.png" alt="AI Agent" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-              <!-- Fallback if no image file -->
-              <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;background:linear-gradient(145deg,#1a1e2a,#0d0f14);">
-                <span class="material-symbols-outlined" style="font-size:56px;background:linear-gradient(135deg,#7ce0f6,#aa8aff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">support_agent</span>
-              </div>
+            <div class="agent-avatar" style="background: linear-gradient(135deg, #0d1f2d 0%, #091520 100%);">
+              <img src="NxtLayrAI Small Logo.png" alt="NxtLayr AI Agent">
               <div class="agent-status"></div>
             </div>
             <span class="agent-label">AI Agent Active</span>
