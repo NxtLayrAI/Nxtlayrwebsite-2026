@@ -204,7 +204,7 @@
       border: 3px solid rgba(124,224,246,0.25);
       box-shadow: 0 0 80px rgba(124,224,246,0.2), 0 0 160px rgba(170,138,255,0.1), inset 0 0 40px rgba(124,224,246,0.08);
     }
-    .agent-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .agent-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
     .agent-avatar::after {
       content: ''; position: absolute; inset: 0; border-radius: 50%;
       background: linear-gradient(135deg, rgba(124,224,246,0.08), rgba(170,138,255,0.12));
@@ -514,9 +514,9 @@
         </div>
 
         <!-- Headline -->
-        <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-headline font-bold leading-[0.95] tracking-tighter mb-8 reveal stagger-1">
+        <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-[4rem] xl:text-[5rem] font-headline font-bold leading-[0.95] tracking-tighter mb-8 reveal stagger-1">
           <span class="text-white">Your body shop</span><br>
-          <span class="text-white">never misses </span><br class="hidden sm:block">
+          <span class="text-white">never misses</span><br>
           <span class="text-white">a </span><span class="bg-gradient-to-r from-primary via-secondary to-primary bg-[length:200%_auto] animate-[gradientShift_4s_ease-in-out_infinite] bg-clip-text text-transparent">call</span><span class="text-white"> again.</span>
         </h1>
 
@@ -538,19 +538,19 @@
         </div>
 
         <!-- Trust -->
-        <div class="flex items-center gap-6 text-white/30 text-xs font-label tracking-wider reveal stagger-4">
-          <span class="flex items-center gap-1.5">
-            <span class="material-symbols-outlined text-sm text-primary/70">verified</span>
+        <div class="flex items-center gap-6 text-white text-sm font-label font-semibold tracking-wide reveal stagger-4">
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-base text-primary">verified</span>
             iBodyShop Integrated
           </span>
-          <span class="text-white/10">|</span>
-          <span class="flex items-center gap-1.5">
-            <span class="material-symbols-outlined text-sm text-tertiary/70">schedule</span>
+          <span class="text-white/20">|</span>
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-base text-tertiary">schedule</span>
             24/7 Coverage
           </span>
-          <span class="text-white/10">|</span>
-          <span class="flex items-center gap-1.5">
-            <span class="material-symbols-outlined text-sm text-secondary/70">rocket_launch</span>
+          <span class="text-white/20">|</span>
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-base text-secondary">rocket_launch</span>
             Live in 7 Days
           </span>
         </div>
@@ -690,8 +690,8 @@
           </div>
           <div class="absolute -top-4 -right-4 glass rounded-2xl p-4 float-badge glow-primary" style="animation-delay: -1s;">
             <div class="flex items-center gap-2">
-              <span class="material-symbols-outlined text-tertiary text-lg">trending_up</span>
-              <span class="text-sm font-bold text-white">+$3.2K</span>
+              <span class="material-symbols-outlined text-lg" style="color:#ff716c;">trending_down</span>
+              <span class="text-sm font-bold text-white">$3.2K</span>
             </div>
             <p class="text-[0.6rem] font-label text-on-surface-variant/60 mt-1">Lost Per Week</p>
           </div>
@@ -1026,24 +1026,24 @@
         </ul>
       </div>
 
-      <!-- Proactive Update Agent -->
+      <!-- Emergency Tow Truck Transfer Agent -->
       <div class="group glass-elevated rounded-3xl p-7 hover:bg-white/[0.04] hover:-translate-y-2 hover:shadow-[0_0_50px_rgba(124,224,246,0.1),0_20px_60px_rgba(0,0,0,0.3)] transition-all duration-500 cursor-pointer reveal stagger-4 gradient-border">
         <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-7 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-500">
-          <span class="material-symbols-outlined text-primary text-2xl">notifications_active</span>
+          <span class="material-symbols-outlined text-primary text-2xl">local_shipping</span>
         </div>
-        <h3 class="text-xl font-headline font-bold mb-3 text-white group-hover:text-primary transition-colors">Proactive Updates</h3>
+        <h3 class="text-xl font-headline font-bold mb-3 text-white group-hover:text-primary transition-colors">Emergency Tow Transfer</h3>
         <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
-          Stop customers calling to check in — the agent calls them first. When a job status changes in iBodyShop, customers are automatically notified by phone or SMS.
+          When a caller needs emergency roadside assistance, the agent identifies the situation, captures location details, and warm-transfers the call directly to your trusted tow truck providers — 24/7.
         </p>
         <ul class="space-y-2.5">
           <li class="flex items-center gap-2.5 text-sm text-on-surface-variant/80">
-            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>iBodyShop trigger-based calls
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>Location &amp; situation capture
           </li>
           <li class="flex items-center gap-2.5 text-sm text-on-surface-variant/80">
-            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>"Car is ready" outbound
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>Warm transfer to trusted providers
           </li>
           <li class="flex items-center gap-2.5 text-sm text-on-surface-variant/80">
-            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>Reduces inbound volume
+            <span class="material-symbols-outlined text-tertiary text-base">check_circle</span>Available 24/7, after-hours
           </li>
         </ul>
       </div>
