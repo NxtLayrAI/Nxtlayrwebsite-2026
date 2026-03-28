@@ -1492,15 +1492,39 @@
 // ===== FORM SUBMIT =====
 function handleFormSubmit(event) {
   event.preventDefault();
-  const btn = document.getElementById('submitBtn');
-  btn.textContent = 'Sent! We\'ll be in touch shortly.';
-  btn.style.background = 'linear-gradient(to right, #b5ffc2, #24f07e)';
+  const form = event.target;
+  const btn = form.querySelector('button[type="submit"]');
+  const originalText = btn.textContent;
+  btn.textContent = 'Sending...';
   btn.disabled = true;
-  setTimeout(() => {
-    btn.textContent = 'Book My Free Call';
-    btn.style.background = '';
+  fetch('https://formspree.io/f/xykbeywk', {
+    method: 'POST',
+    body: new FormData(form),
+    headers: { 'Accept': 'application/json' }
+  })
+  .then(response => {
+    if (response.ok) {
+      btn.textContent = 'Sent! We\'ll be in touch shortly.';
+      btn.style.background = 'linear-gradient(to right, #b5ffc2, #24f07e)';
+      btn.style.color = '#000';
+      form.reset();
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.style.background = '';
+        btn.style.color = '';
+        btn.disabled = false;
+      }, 5000);
+    } else {
+      btn.textContent = 'Something went wrong — try again';
+      btn.disabled = false;
+      setTimeout(() => { btn.textContent = originalText; }, 3000);
+    }
+  })
+  .catch(() => {
+    btn.textContent = 'Something went wrong — try again';
     btn.disabled = false;
-  }, 5000);
+    setTimeout(() => { btn.textContent = originalText; }, 3000);
+  });
 }
 </script>
 
